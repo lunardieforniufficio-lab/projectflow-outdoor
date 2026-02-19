@@ -9,7 +9,7 @@
 ```
 BLOCCO CORRENTE: 0 — Setup Infrastruttura
 ULTIMA MILESTONE: nessuna
-ULTIMO COMMIT: nessuno
+ULTIMO COMMIT: 20c7299
 ```
 
 ---
@@ -19,16 +19,16 @@ ULTIMO COMMIT: nessuno
 
 | # | Task | Stato | Commit |
 |---|------|-------|--------|
-| 0.1 | Init Next.js + TypeScript + Tailwind | ⬜ | |
-| 0.2 | Installa TUTTE le dipendenze da stack | ⬜ | |
+| 0.1 | Init Next.js + TypeScript + Tailwind | ✅ | `20c7299` |
+| 0.2 | Installa TUTTE le dipendenze da stack | ✅ | `20c7299` |
 | 0.3 | Configura Clerk (auth) | ⬜ | |
 | 0.4 | Setup shadcn/ui + tema dark Lunardi & Forni | ⬜ | |
-| 0.5 | Crea `globals.css` con variabili `--pf-*` | ⬜ | |
-| 0.6 | Crea struttura cartelle completa (vuota) | ⬜ | |
-| 0.7 | File `.env.local` con placeholder | ⬜ | |
+| 0.5 | Crea `globals.css` con variabili `--pf-*` | ✅ | `20c7299` |
+| 0.6 | Crea struttura cartelle completa (vuota) | ✅ | `20c7299` |
+| 0.7 | File `.env.local` con placeholder | ✅ | `20c7299` |
 | 0.8 | Setup PostgreSQL: crea tabelle config (ruoli, stati, transizioni, vincoli, tipi, aree) | ⬜ | |
 | 0.9 | Esegui SEED_DATA.md (dati iniziali) | ⬜ | |
-| 0.10 | Init git + primo commit + tag v0.0.1 | ⬜ | |
+| 0.10 | Init git + primo commit + tag v0.0.1 | ✅ | `20c7299` |
 
 **Criterio completamento**: progetto parte con `npm run dev`, Clerk login funziona, DB ha tabelle config populate.
 
