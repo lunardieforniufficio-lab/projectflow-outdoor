@@ -7,9 +7,9 @@
 ## Stato Attuale
 
 ```
-BLOCCO CORRENTE: 1 — Fondamenta Codice (7/10 completati)
-ULTIMA MILESTONE: v0.0.1
-ULTIMO COMMIT: 0749487
+BLOCCO CORRENTE: 2 — Componenti Atomici + Form ✅ COMPLETATO
+ULTIMA MILESTONE: v0.2.0
+ULTIMO COMMIT: 431e3fc
 ```
 
 ---
@@ -59,22 +59,22 @@ ULTIMO COMMIT: 0749487
 
 | # | Task | Stato | Commit |
 |---|------|-------|--------|
-| 2.1 | Installa e personalizza shadcn/ui base (button, input, dialog, tabs, badge...) | ⬜ | |
-| 2.2 | `ui/badge-stato.tsx` (colori da DB) | ⬜ | |
-| 2.3 | `ui/progress-arc.tsx` | ⬜ | |
-| 2.4 | `ui/pill-tabs.tsx` | ⬜ | |
-| 2.5 | `ui/floating-pill-nav.tsx` | ⬜ | |
-| 2.6 | `ui/campo-ricerca.tsx` | ⬜ | |
-| 2.7 | `ui/export-toolbar.tsx` (CSV, Excel, JSON) | ⬜ | |
-| 2.8 | `ui/empty-state.tsx` + `ui/skeleton-loader.tsx` + `ui/conferma-dialog.tsx` | ⬜ | |
-| 2.9 | `forms/campo-codice-fiscale.tsx` (con codice-fiscale-js) | ⬜ | |
-| 2.10 | `forms/campo-telefono.tsx` (con libphonenumber-js) | ⬜ | |
-| 2.11 | `forms/campo-iban.tsx` (con ibantools) | ⬜ | |
-| 2.12 | `forms/campo-email.tsx` + `forms/campo-valuta.tsx` + `forms/campo-data.tsx` | ⬜ | |
-| 2.13 | `forms/campo-select-config.tsx` (select generico da tabella DB) | ⬜ | |
-| 2.14 | `forms/campo-upload-file.tsx` (react-dropzone) | ⬜ | |
-| 2.15 | Pagina test visuale di tutti i componenti (demo page) | ⬜ | |
-| 2.16 | Git tag v0.2.0 | ⬜ | |
+| 2.1 | Installa e personalizza shadcn/ui base (button, input, dialog, tabs, badge...) | ✅ | `351617c` |
+| 2.2 | `ui/badge-stato.tsx` (colori da DB) | ✅ | `351617c` |
+| 2.3 | `ui/progress-arc.tsx` | ✅ | `351617c` |
+| 2.4 | `ui/pill-tabs.tsx` | ✅ | `351617c` |
+| 2.5 | `ui/floating-pill-nav.tsx` | ✅ | `351617c` |
+| 2.6 | `ui/campo-ricerca.tsx` | ✅ | `351617c` |
+| 2.7 | `ui/export-toolbar.tsx` (CSV, Excel, JSON) | ✅ | `351617c` |
+| 2.8 | `ui/empty-state.tsx` + `ui/skeleton-loader.tsx` + `ui/conferma-dialog.tsx` | ✅ | `351617c` |
+| 2.9 | `forms/campo-codice-fiscale.tsx` (con codice-fiscale-js) | ✅ | `431e3fc` |
+| 2.10 | `forms/campo-telefono.tsx` (con libphonenumber-js) | ✅ | `431e3fc` |
+| 2.11 | `forms/campo-iban.tsx` (con ibantools) | ✅ | `431e3fc` |
+| 2.12 | `forms/campo-email.tsx` + `forms/campo-valuta.tsx` + `forms/campo-data.tsx` | ✅ | `431e3fc` |
+| 2.13 | `forms/campo-select-config.tsx` (select generico da tabella DB) | ✅ | `431e3fc` |
+| 2.14 | `forms/campo-upload-file.tsx` (react-dropzone) | ✅ | `431e3fc` |
+| 2.15 | Pagina test visuale di tutti i componenti (demo page) | ✅ | `431e3fc` |
+| 2.16 | Git tag v0.2.0 | ✅ | `431e3fc` |
 
 **Criterio completamento**: tutti i componenti renderizzano correttamente in una demo page, form con validazione funzionano.
 
