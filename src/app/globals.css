@@ -1,0 +1,132 @@
+/* === Google Font Outfit === */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+/* === Variabili tema ProjectFlow === */
+:root {
+  /* Sfondo e superfici */
+  --pf-bg-primary: #0c0c0c;
+  --pf-bg-surface: #111111;
+  --pf-bg-elevated: #1a1a1a;
+  --pf-bg-hover: rgba(255, 255, 255, 0.02);
+  --pf-bg-active: rgba(255, 255, 255, 0.04);
+
+  /* Bordi */
+  --pf-border: #222222;
+  --pf-border-light: #1a1a1a;
+  --pf-border-focus: #1b8c3a;
+
+  /* Testo */
+  --pf-text-primary: #e8e8e8;
+  --pf-text-secondary: #888888;
+  --pf-text-muted: #555555;
+  --pf-text-disabled: #333333;
+
+  /* Accenti — il verde brand è l'accento primario */
+  --pf-accent-primary: #1b8c3a;
+  --pf-accent-primary-light: #24a847;
+  --pf-accent-primary-subtle: rgba(27, 140, 58, 0.12);
+  --pf-accent-yellow: #f59e0b;
+  --pf-accent-red: #ef4444;
+  --pf-accent-blue: #3b82f6;
+  --pf-accent-purple: #a78bfa;
+
+  /* Glow effects */
+  --pf-glow-green: 0 0 12px rgba(27, 140, 58, 0.4);
+  --pf-glow-red: 0 0 8px rgba(239, 68, 68, 0.4);
+
+  /* Border radius */
+  --pf-radius-sm: 8px;
+  --pf-radius-md: 14px;
+  --pf-radius-lg: 16px;
+  --pf-radius-pill: 50px;
+
+  /* Animazioni */
+  --pf-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --pf-duration-fast: 200ms;
+  --pf-duration-normal: 300ms;
+  --pf-duration-slow: 400ms;
+}
+
+/* === Integrazione Tailwind v4 === */
+@theme inline {
+  --color-background: var(--pf-bg-primary);
+  --color-foreground: var(--pf-text-primary);
+  --color-surface: var(--pf-bg-surface);
+  --color-elevated: var(--pf-bg-elevated);
+  --color-border: var(--pf-border);
+  --color-accent: var(--pf-accent-primary);
+  --color-accent-light: var(--pf-accent-primary-light);
+  --color-accent-subtle: var(--pf-accent-primary-subtle);
+  --color-danger: var(--pf-accent-red);
+  --color-warning: var(--pf-accent-yellow);
+  --color-info: var(--pf-accent-blue);
+  --font-sans: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+/* === Reset base e body === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--pf-bg-primary);
+  color: var(--pf-text-primary);
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Scrollbar personalizzata === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--pf-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pf-border);
+  border-radius: var(--pf-radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pf-text-muted);
+}
+
+/* === Selezione testo === */
+::selection {
+  background: var(--pf-accent-primary-subtle);
+  color: var(--pf-text-primary);
+}
+
+/* === Focus visibile accessibile === */
+:focus-visible {
+  outline: 2px solid var(--pf-border-focus);
+  outline-offset: 2px;
+}
+
+/* === Link base === */
+a {
+  color: var(--pf-accent-primary);
+  text-decoration: none;
+  transition: color var(--pf-duration-fast) var(--pf-easing);
+}
+
+a:hover {
+  color: var(--pf-accent-primary-light);
+}
