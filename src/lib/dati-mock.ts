@@ -10,6 +10,8 @@ import type {
     Squadra,
     Fornitore,
     TimelineEntry,
+    Ruolo,
+    UtenteDettaglio,
 } from "@/types";
 
 // === STATI CANTIERE (simula DB) ===
@@ -124,4 +126,55 @@ export const timelineDemo: TimelineEntry[] = [
     { id: "tl10", cantiereId: "k4", tipo: "nota", autoreId: "u5", autoreNome: "Simone Cocci", contenuto: "Ritardo fornitore comunicato: slittamento di 5 giorni per problemi di produzione.", metadata: null, creatoIl: "2025-04-25T08:00:00Z" },
     { id: "tl11", cantiereId: "k6", tipo: "cambio_stato", autoreId: "u1", autoreNome: "Marco Vitaletti", contenuto: "Stato aggiornato da Collaudo a Saldo", metadata: { statoDa: "COLLAUDO", statoA: "SALDO" }, creatoIl: "2025-03-12T10:00:00Z" },
     { id: "tl12", cantiereId: "k6", tipo: "nota", autoreId: "u2", autoreNome: "Alberto Bini", contenuto: "Collaudo superato. Cliente molto soddisfatto. Richiedere recensione Google.", metadata: null, creatoIl: "2025-03-12T15:00:00Z" },
+];
+
+// === RUOLI DEMO ===
+export const ruoliDemo: Ruolo[] = [
+    { id: "r1", codice: "admin", label: "Admin", descrizione: "Amministratore sistema", colore: "#ef4444", icona: "shield", ordine: 1, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r2", codice: "titolare", label: "Titolare", descrizione: "Socio/titolare azienda", colore: "#f59e0b", icona: "crown", ordine: 2, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r3", codice: "venditore", label: "Venditore", descrizione: "Commerciale", colore: "#3b82f6", icona: "briefcase", ordine: 3, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r4", codice: "centralino", label: "Centralino", descrizione: "Primo contatto clienti", colore: "#8b5cf6", icona: "phone", ordine: 4, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r5", codice: "tecnico", label: "Tecnico", descrizione: "Ufficio tecnico", colore: "#06b6d4", icona: "ruler", ordine: 5, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r6", codice: "logistica", label: "Logistica", descrizione: "Acquisti e logistica", colore: "#f97316", icona: "truck", ordine: 6, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r7", codice: "caposquadra", label: "Caposquadra", descrizione: "Responsabile squadra posa", colore: "#1B8C3A", icona: "hard-hat", ordine: 7, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r8", codice: "installatore", label: "Installatore", descrizione: "Operaio posa", colore: "#22c55e", icona: "wrench", ordine: 8, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r9", codice: "magazziniere", label: "Magazziniere", descrizione: "Gestione magazzino", colore: "#a78bfa", icona: "warehouse", ordine: 9, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r10", codice: "amministrazione", label: "Amministrazione", descrizione: "Ufficio amministrativo", colore: "#ec4899", icona: "file-text", ordine: 10, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "r11", codice: "contabilita", label: "Contabilità", descrizione: "Gestione contabile", colore: "#14b8a6", icona: "calculator", ordine: 11, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+];
+
+// === AREE AZIENDALI DEMO ===
+export const areeDemo = [
+    { id: "a1", codice: "direzione", label: "Direzione" },
+    { id: "a2", codice: "tutto", label: "Tutto" },
+    { id: "a3", codice: "primo_contatto", label: "Primo Contatto" },
+    { id: "a4", codice: "commerciale", label: "Commerciale" },
+    { id: "a5", codice: "logistica", label: "Logistica" },
+    { id: "a6", codice: "ufficio_tecnico", label: "Ufficio Tecnico" },
+    { id: "a7", codice: "magazzino", label: "Magazzino" },
+    { id: "a8", codice: "amministrazione", label: "Amministrazione" },
+    { id: "a9", codice: "operativa", label: "Operativa" },
+];
+
+// === UTENTI DEMO (organigramma reale) ===
+export const utentiDemo: UtenteDettaglio[] = [
+    { id: "u1", clerkUserId: "clerk_1", nome: "Marco", cognome: "Vitaletti", emailAziendale: "v.marco@lunardieforni.it", whatsapp: null, ruoloId: "r1", areaId: "a2", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "admin", label: "Admin", colore: "#ef4444" }, area: { codice: "tutto", label: "Tutto" } },
+    { id: "u2", clerkUserId: "clerk_2", nome: "Gabriele", cognome: "Forni", emailAziendale: "gabriele@lunardieforni.it", whatsapp: null, ruoloId: "r2", areaId: "a1", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "titolare", label: "Titolare", colore: "#f59e0b" }, area: { codice: "direzione", label: "Direzione" } },
+    { id: "u3", clerkUserId: "clerk_3", nome: "Martina", cognome: "Cialdi", emailAziendale: "assistenza@lunardieforni.it", whatsapp: null, ruoloId: "r4", areaId: "a3", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "centralino", label: "Centralino", colore: "#8b5cf6" }, area: { codice: "primo_contatto", label: "Primo Contatto" } },
+    { id: "u4", clerkUserId: "clerk_4", nome: "Alberto", cognome: "Bini", emailAziendale: "b.alberto@lunardieforni.it", whatsapp: null, ruoloId: "r3", areaId: "a4", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "venditore", label: "Venditore", colore: "#3b82f6" }, area: { codice: "commerciale", label: "Commerciale" } },
+    { id: "u5", clerkUserId: "clerk_5", nome: "Davide", cognome: "Guidotti", emailAziendale: "commerciale@lunardieforni.it", whatsapp: null, ruoloId: "r3", areaId: "a4", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "venditore", label: "Venditore", colore: "#3b82f6" }, area: { codice: "commerciale", label: "Commerciale" } },
+    { id: "u6", clerkUserId: "clerk_6", nome: "Gabriele", cognome: "Albanese", emailAziendale: "a.gabriele@lunardieforni.it", whatsapp: null, ruoloId: "r3", areaId: "a4", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "venditore", label: "Venditore", colore: "#3b82f6" }, area: { codice: "commerciale", label: "Commerciale" } },
+    { id: "u7", clerkUserId: "clerk_7", nome: "Simone", cognome: "Cocci", emailAziendale: "ordini@lunardieforni.it", whatsapp: null, ruoloId: "r6", areaId: "a5", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "logistica", label: "Logistica", colore: "#f97316" }, area: { codice: "logistica", label: "Logistica" } },
+    { id: "u8", clerkUserId: "clerk_8", nome: "Michele", cognome: "Ciolini", emailAziendale: "tecnico@lunardieforni.it", whatsapp: null, ruoloId: "r5", areaId: "a6", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "tecnico", label: "Tecnico", colore: "#06b6d4" }, area: { codice: "ufficio_tecnico", label: "Ufficio Tecnico" } },
+    { id: "u9", clerkUserId: "clerk_9", nome: "Leonardo", cognome: "Manzone", emailAziendale: null, whatsapp: null, ruoloId: "r9", areaId: "a7", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "magazziniere", label: "Magazziniere", colore: "#a78bfa" }, area: { codice: "magazzino", label: "Magazzino" } },
+    { id: "u10", clerkUserId: "clerk_10", nome: "Martina", cognome: "Forni", emailAziendale: "info@lunardieforni.it", whatsapp: null, ruoloId: "r10", areaId: "a8", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "amministrazione", label: "Amministrazione", colore: "#ec4899" }, area: { codice: "amministrazione", label: "Amministrazione" } },
+    { id: "u11", clerkUserId: "clerk_11", nome: "Lara", cognome: "Cappellini", emailAziendale: "amministrazionelef@gmail.com", whatsapp: null, ruoloId: "r11", areaId: "a8", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "contabilita", label: "Contabilità", colore: "#14b8a6" }, area: { codice: "amministrazione", label: "Amministrazione" } },
+    { id: "u12", clerkUserId: "clerk_12", nome: "Francesco", cognome: "Sinagra", emailAziendale: null, whatsapp: null, ruoloId: "r7", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "caposquadra", label: "Caposquadra", colore: "#1B8C3A" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u13", clerkUserId: "clerk_13", nome: "Roberto", cognome: "Giglioni", emailAziendale: null, whatsapp: null, ruoloId: "r7", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "caposquadra", label: "Caposquadra", colore: "#1B8C3A" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u14", clerkUserId: "clerk_14", nome: "Leonardo", cognome: "Sinagra", emailAziendale: null, whatsapp: null, ruoloId: "r7", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "caposquadra", label: "Caposquadra", colore: "#1B8C3A" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u15", clerkUserId: "clerk_15", nome: "Antonino", cognome: "Sanfilippo", emailAziendale: null, whatsapp: null, ruoloId: "r7", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "caposquadra", label: "Caposquadra", colore: "#1B8C3A" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u16", clerkUserId: "clerk_16", nome: "Pierpaolo", cognome: "Giachi", emailAziendale: null, whatsapp: null, ruoloId: "r8", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "installatore", label: "Installatore", colore: "#22c55e" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u17", clerkUserId: "clerk_17", nome: "Francesco", cognome: "Ponziani", emailAziendale: null, whatsapp: null, ruoloId: "r8", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "installatore", label: "Installatore", colore: "#22c55e" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u18", clerkUserId: "clerk_18", nome: "Daniele", cognome: "Falcetta", emailAziendale: null, whatsapp: null, ruoloId: "r8", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "installatore", label: "Installatore", colore: "#22c55e" }, area: { codice: "operativa", label: "Operativa" } },
+    { id: "u19", clerkUserId: "clerk_19", nome: "Alessio", cognome: "Consales", emailAziendale: null, whatsapp: null, ruoloId: "r8", areaId: "a9", attivo: true, creatoIl: "2025-01-01T00:00:00Z", aggiornatoIl: "2025-01-01T00:00:00Z", ruolo: { codice: "installatore", label: "Installatore", colore: "#22c55e" }, area: { codice: "operativa", label: "Operativa" } },
 ];

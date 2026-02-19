@@ -1,7 +1,1 @@
-feat(ui): layout principale con sidebar, dashboard stats e pagina cantieri
-
-- Sidebar collassabile desktop + sheet mobile
-- Dashboard con 4 stat cards, grafico barre per stato, alert panel, cantieri recenti
-- Pagina cantieri con ricerca, filtri stato, tabella responsive, ExportToolbar
-- Dati mock per sviluppo UI
-- StatCard riusabile con icona, trend e glow effect
+docs(roadmap): aggiornato stato blocco 4 con task completati
