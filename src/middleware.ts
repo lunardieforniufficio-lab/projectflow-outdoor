@@ -6,6 +6,17 @@ const isRoutaPubblica = createRouteMatcher([
     "/sign-up(.*)",
     "/api/webhook(.*)",
     "/demo(.*)",
+    // TODO: rimuovere in produzione — temporaneo per sviluppo UI
+    "/",
+    "/cantieri(.*)",
+    "/kanban(.*)",
+    "/clienti(.*)",
+    "/fornitori(.*)",
+    "/squadre(.*)",
+    "/calendario(.*)",
+    "/ai(.*)",
+    "/admin(.*)",
+    "/report(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

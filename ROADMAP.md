@@ -7,9 +7,9 @@
 ## Stato Attuale
 
 ```
-BLOCCO CORRENTE: 2 — Componenti Atomici + Form ✅ COMPLETATO
+BLOCCO CORRENTE: 4 — Moduli Core (parziale)
 ULTIMA MILESTONE: v0.2.0
-ULTIMO COMMIT: 431e3fc
+ULTIMO COMMIT: (da aggiornare post-commit)
 ```
 
 ---
@@ -108,15 +108,21 @@ ULTIMO COMMIT: 431e3fc
 
 | # | Task | Stato | Commit |
 |---|------|-------|--------|
-| 4.1 | `modules/timeline/` completo (lista, entry, add note) | ⬜ | |
-| 4.2 | `modules/kanban/` completo (board, column, card) — colonne da DB | ⬜ | |
-| 4.3 | `modules/media-gallery/` (upload Google Drive, thumbnails) | ⬜ | |
-| 4.4 | `modules/cantiere-detail/` (header, progress, info, actions) | ⬜ | |
-| 4.5 | `modules/nav/` (pill-nav desktop, mobile-bottom-bar) | ⬜ | |
-| 4.6 | `modules/calendario/` (Google Calendar integration) | ⬜ | |
-| 4.7 | Git tag v0.4.0 | ⬜ | |
+| 4.1 | `modules/timeline/` completo (lista, entry, add note) | ✅ | |
+| 4.2 | `modules/kanban/` completo (board, column, card) — dnd-kit | ✅ | |
+| 4.3 | `modules/media-gallery/` (upload Google Drive, thumbnails) | ⏳ | |
+| 4.4 | `modules/cantiere-detail/` (header, progress, info, tabs) | ✅ | |
+| 4.5 | `modules/nav/` aggiornato con voce Kanban | ✅ | |
+| 4.6 | `modules/calendario/` (Google Calendar integration) | ⏳ | |
+| 4.7 | Pagina dettaglio cantiere `/cantieri/[id]` | ✅ | |
+| 4.8 | Pagina kanban `/kanban` | ✅ | |
+| 4.9 | Dati mock espansi (timeline, fornitori, dettaglio) | ✅ | |
+| 4.10 | Tabella cantieri con navigazione a dettaglio | ✅ | |
+| 4.11 | Git tag v0.4.0 | ⬜ | |
 
-**Criterio completamento**: moduli funzionano standalone con dati dal DB. Kanban drag-and-drop funziona.
+**Criterio completamento**: moduli funzionano standalone con dati mock. Kanban drag-and-drop funziona.
+
+> **Nota**: 4.3 e 4.6 rimandati — richiedono configurazione Google API (Drive + Calendar).
 
 ---
 

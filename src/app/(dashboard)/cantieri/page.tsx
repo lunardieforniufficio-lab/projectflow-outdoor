@@ -3,6 +3,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
     HardHat,
     Plus,
@@ -40,6 +41,7 @@ function formatData(iso: string | null): string {
 }
 
 export default function PaginaCantieri() {
+    const router = useRouter();
     const [ricerca, setRicerca] = useState("");
     const [filtroStato, setFiltroStato] = useState<string | null>(null);
     const [mostraFiltri, setMostraFiltri] = useState(false);
@@ -275,6 +277,7 @@ export default function PaginaCantieri() {
                                 return (
                                     <tr
                                         key={cantiere.id}
+                                        onClick={() => router.push(`/cantieri/${cantiere.id}`)}
                                         className="border-b border-[var(--pf-border-light)] last:border-0 hover:bg-[var(--pf-bg-hover)] transition-colors cursor-pointer group"
                                     >
                                         <td className="py-3.5 px-4">

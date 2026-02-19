@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import {
     LayoutDashboard,
     HardHat,
+    Columns3,
     Users,
     Truck,
     UserCog,
@@ -35,6 +36,7 @@ interface VoceNav {
 const vociNav: VoceNav[] = [
     { id: "dashboard", label: "Dashboard", icona: <LayoutDashboard size={20} />, href: "/" },
     { id: "cantieri", label: "Cantieri", icona: <HardHat size={20} />, href: "/cantieri" },
+    { id: "kanban", label: "Kanban", icona: <Columns3 size={20} />, href: "/kanban" },
     { id: "clienti", label: "Clienti", icona: <Users size={20} />, href: "/clienti" },
     { id: "fornitori", label: "Fornitori", icona: <Truck size={20} />, href: "/fornitori" },
     { id: "squadre", label: "Squadre", icona: <UserCog size={20} />, href: "/squadre" },

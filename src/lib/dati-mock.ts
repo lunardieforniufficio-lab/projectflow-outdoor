@@ -8,6 +8,8 @@ import type {
     Alert,
     Cliente,
     Squadra,
+    Fornitore,
+    TimelineEntry,
 } from "@/types";
 
 // === STATI CANTIERE (simula DB) ===
@@ -39,6 +41,13 @@ export const squadreDemo: Squadra[] = [
     { id: "sq3", nome: "Team Esterni", responsabileId: null, telefono: null, colore: "#f59e0b", attiva: true, creatoIl: "2025-01-01T10:00:00Z" },
 ];
 
+// === TIPI PRODOTTO DEMO ===
+export const tipiProdottoDemo = [
+    { id: "tp1", codice: "evolution_elite", label: "Evolution Elite", categoria: "pergola" },
+    { id: "tp2", codice: "bioclimatica_plus", label: "Bioclimatica Plus", categoria: "bioclimatica" },
+    { id: "tp3", codice: "pergotenda_classic", label: "Pergotenda Classic", categoria: "pergotenda" },
+];
+
 // === CANTIERI DEMO ===
 export const cantieriDemo: Cantiere[] = [
     { id: "k1", codice: "C-2025-001", clienteId: "c1", tipoProdottoId: "tp1", statoId: "s7", importoTotale: 18425.00, importoAcconto: 7370.00, accontoPagato: true, indirizzoCantiere: "Via Roma 42, Firenze", cittaCantiere: "Firenze", squadraId: "sq1", venditoreId: "u2", progettistaId: null, dataInizio: "2025-04-15", dataFinePrevista: "2025-05-20", dataFineReale: null, noteInterne: "Pergola bioclimatica con illuminazione LED", googleCalendarEventId: null, googleDriveFolderId: null, creatoIl: "2025-01-15T10:00:00Z", aggiornatoIl: "2025-04-15T10:00:00Z", creatoDa: "u1" },
@@ -51,17 +60,18 @@ export const cantieriDemo: Cantiere[] = [
     { id: "k8", codice: "C-2025-008", clienteId: "c4", tipoProdottoId: "tp1", statoId: "s4", importoTotale: 28000.00, importoAcconto: 11200.00, accontoPagato: true, indirizzoCantiere: "Viale Europa 33, Bologna", cittaCantiere: "Bologna", squadraId: null, venditoreId: "u2", progettistaId: null, dataInizio: null, dataFinePrevista: "2025-08-01", dataFineReale: null, noteInterne: "Rilievo programmato per prossima settimana", googleCalendarEventId: null, googleDriveFolderId: null, creatoIl: "2025-03-15T10:00:00Z", aggiornatoIl: "2025-04-05T10:00:00Z", creatoDa: "u1" },
 ];
 
-// === DETTAGLIO CANTIERI (con relazioni) ===
-export const cantieriDettaglioDemo: Partial<CantiereDettaglio>[] = cantieriDemo.map((cantiere) => {
+// === DETTAGLIO CANTIERI (con relazioni espanse) ===
+export const cantieriDettaglioDemo: CantiereDettaglio[] = cantieriDemo.map((cantiere) => {
     const cliente = clientiDemo.find((c) => c.id === cantiere.clienteId);
     const stato = statiCantiereDemo.find((s) => s.id === cantiere.statoId);
     const squadra = squadreDemo.find((s) => s.id === cantiere.squadraId);
+    const tipo = tipiProdottoDemo.find((t) => t.id === cantiere.tipoProdottoId);
 
     return {
         ...cantiere,
         cliente: cliente ? { id: cliente.id, nome: cliente.nome, cognome: cliente.cognome, telefono: cliente.telefono, email: cliente.email } : { id: "", nome: "", cognome: "", telefono: "", email: null },
         stato: stato ? { codice: stato.codice, label: stato.label, colore: stato.colore } : { codice: "", label: "", colore: "#666" },
-        tipoProdotto: { codice: "evolution_elite", label: "Evolution Elite", categoria: "pergola" },
+        tipoProdotto: tipo ? { codice: tipo.codice, label: tipo.label, categoria: tipo.categoria } : { codice: "evolution_elite", label: "Evolution Elite", categoria: "pergola" },
         squadra: squadra ? { id: squadra.id, nome: squadra.nome, colore: squadra.colore } : null,
         venditore: { id: "u2", nome: "Francesco", cognome: "Sinagra" },
     };
@@ -92,9 +102,26 @@ export const alertDemo: Alert[] = [
     { id: "a2", tipo: "scadenza_prevista", messaggio: "Cantiere C-2025-001 supera data fine prevista tra 3 giorni", cantiereId: "k1", cantiereCodice: "C-2025-001", gravita: "media", creatoIl: "2025-05-17T08:00:00Z", letto: false },
 ];
 
-// === TIPI PRODOTTO DEMO ===
-export const tipiProdottoDemo = [
-    { id: "tp1", codice: "evolution_elite", label: "Evolution Elite", categoria: "pergola" },
-    { id: "tp2", codice: "bioclimatica_plus", label: "Bioclimatica Plus", categoria: "bioclimatica" },
-    { id: "tp3", codice: "pergotenda_classic", label: "Pergotenda Classic", categoria: "pergotenda" },
+// === FORNITORI DEMO ===
+export const fornitoriDemo: Fornitore[] = [
+    { id: "f1", nome: "KE Outdoor Design", partitaIva: "04056850265", referente: "Marco Zago", email: "ordini@keoutdoor.com", telefono: "+390423738600", indirizzo: "Via Serenissima 1, Godega di Sant'Urbano (TV)", note: "Fornitore principale pergole", attivo: true, creatoIl: "2025-01-01T10:00:00Z" },
+    { id: "f2", nome: "Frigerio Living", partitaIva: "03228530137", referente: "Laura Frigerio", email: "info@frigerioliving.com", telefono: "+390318210700", indirizzo: "Via Lecco 12, Cisano Bergamasco (BG)", note: "Bioclimatiche e tende", attivo: true, creatoIl: "2025-01-01T10:00:00Z" },
+    { id: "f3", nome: "Corradi Outdoor Living", partitaIva: "01234567890", referente: "Andrea Corradi", email: "ordini@corradi.eu", telefono: "+39049877000", indirizzo: "Via Corte Garofolo 100, Bologna (BO)", note: null, attivo: true, creatoIl: "2025-01-01T10:00:00Z" },
+    { id: "f4", nome: "Ferramenta Industriale Toscana", partitaIva: "09876543210", referente: "Giovanni Bruni", email: "vendite@fit-srl.it", telefono: "+390573445566", indirizzo: "Via dell'Industria 5, Pistoia (PT)", note: "Minuteria e ferramenta", attivo: true, creatoIl: "2025-01-15T10:00:00Z" },
+];
+
+// === TIMELINE DEMO ===
+export const timelineDemo: TimelineEntry[] = [
+    { id: "tl1", cantiereId: "k1", tipo: "cambio_stato", autoreId: "u1", autoreNome: "Marco Vitaletti", contenuto: "Stato aggiornato da Acconto a Rilievo", metadata: { statoDa: "ACCONTO", statoA: "RILIEVO" }, creatoIl: "2025-02-15T09:00:00Z" },
+    { id: "tl2", cantiereId: "k1", tipo: "nota", autoreId: "u2", autoreNome: "Francesco Sinagra", contenuto: "Verificato accesso cantiere dal lato giardino. Nessun ostacolo per il montaggio.", metadata: null, creatoIl: "2025-02-20T14:30:00Z" },
+    { id: "tl3", cantiereId: "k1", tipo: "cambio_stato", autoreId: "u1", autoreNome: "Marco Vitaletti", contenuto: "Stato aggiornato da Rilievo a Progetto", metadata: { statoDa: "RILIEVO", statoA: "PROGETTO" }, creatoIl: "2025-03-01T10:00:00Z" },
+    { id: "tl4", cantiereId: "k1", tipo: "foto", autoreId: "u3", autoreNome: "Francesco Sinagra", contenuto: "Foto rilievo area di installazione", metadata: { mediaCount: 3, mediaType: "foto" }, creatoIl: "2025-03-02T11:15:00Z" },
+    { id: "tl5", cantiereId: "k1", tipo: "cambio_stato", autoreId: "u1", autoreNome: "Marco Vitaletti", contenuto: "Stato aggiornato da Ordine a Posa", metadata: { statoDa: "ORDINE", statoA: "POSA" }, creatoIl: "2025-04-10T08:00:00Z" },
+    { id: "tl6", cantiereId: "k1", tipo: "nota", autoreId: "u3", autoreNome: "Francesco Sinagra", contenuto: "Inizio posa previsto per lunedì 15. Squadra Nexteam confermata. Portare scala telescopica.", metadata: null, creatoIl: "2025-04-12T16:45:00Z" },
+    { id: "tl7", cantiereId: "k2", tipo: "cambio_stato", autoreId: "u1", autoreNome: "Marco Vitaletti", contenuto: "Stato aggiornato da Vendita a Acconto", metadata: { statoDa: "VENDITA", statoA: "ACCONTO" }, creatoIl: "2025-03-10T10:00:00Z" },
+    { id: "tl8", cantiereId: "k2", tipo: "nota", autoreId: "u2", autoreNome: "Alberto Bini", contenuto: "Cliente ha confermato modello Bioclimatica Plus con LED integrati. Acconto ricevuto.", metadata: null, creatoIl: "2025-03-10T11:00:00Z" },
+    { id: "tl9", cantiereId: "k4", tipo: "ordine", autoreId: "u5", autoreNome: "Simone Cocci", contenuto: "Ordine #ORD-2025-012 inviato a KE Outdoor — consegna prevista 20/04", metadata: { fornitore: "KE Outdoor Design", ordineId: "ord1" }, creatoIl: "2025-04-01T09:30:00Z" },
+    { id: "tl10", cantiereId: "k4", tipo: "nota", autoreId: "u5", autoreNome: "Simone Cocci", contenuto: "Ritardo fornitore comunicato: slittamento di 5 giorni per problemi di produzione.", metadata: null, creatoIl: "2025-04-25T08:00:00Z" },
+    { id: "tl11", cantiereId: "k6", tipo: "cambio_stato", autoreId: "u1", autoreNome: "Marco Vitaletti", contenuto: "Stato aggiornato da Collaudo a Saldo", metadata: { statoDa: "COLLAUDO", statoA: "SALDO" }, creatoIl: "2025-03-12T10:00:00Z" },
+    { id: "tl12", cantiereId: "k6", tipo: "nota", autoreId: "u2", autoreNome: "Alberto Bini", contenuto: "Collaudo superato. Cliente molto soddisfatto. Richiedere recensione Google.", metadata: null, creatoIl: "2025-03-12T15:00:00Z" },
 ];
