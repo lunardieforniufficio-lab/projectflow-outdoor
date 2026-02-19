@@ -9,7 +9,7 @@
 ```
 BLOCCO CORRENTE: 5 — Layout, Pagine, Admin (avanzato)
 ULTIMA MILESTONE: v0.2.0
-ULTIMO COMMIT: da completare
+ULTIMO COMMIT: 49abff3
 ```
 
 ---
