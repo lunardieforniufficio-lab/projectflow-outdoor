@@ -9,7 +9,7 @@
 ```
 BLOCCO CORRENTE: 4 — Moduli Core (parziale)
 ULTIMA MILESTONE: v0.2.0
-ULTIMO COMMIT: (da aggiornare post-commit)
+ULTIMO COMMIT: 6855883
 ```
 
 ---
