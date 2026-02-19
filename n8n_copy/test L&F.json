@@ -1,0 +1,541 @@
+{
+  "name": "test L&F",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "=voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "701fcbe7-6b70-4656-a88f-1b23142fde97"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "11cede8a-f399-4b42-a04c-730eb0b730a9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2960,
+        -448
+      ],
+      "id": "425e68b1-b9ef-438b-9886-87df3e308e3c",
+      "name": "Tipo Messaggio"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.messages[0].voice.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3296,
+        -496
+      ],
+      "id": "01a1e451-9cde-482f-9dbd-682ad538dcd2",
+      "name": "Download Audio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-assignment",
+              "name": "messageText",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3664,
+        -496
+      ],
+      "id": "ad631a6f-13a7-4ba2-b909-8667421e6631",
+      "name": "Prepara Dati Trascritti"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-assignment",
+              "name": "messageText",
+              "value": "={{ $json.messages[0].text.body }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        -208
+      ],
+      "id": "91771a59-cedd-4095-b179-03e3bb3e7b82",
+      "name": "Prepara Dati Testo"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messageText }}",
+        "options": {
+          "systemMessage": "=# Panoramica\n\nSei un assistente customer service per **Lunardi e Forni**, un'azienda specializzata nella vendita e nel montaggio di arredi da giardino di alta qualità. Il tuo obiettivo è fornire un servizio professionale, cortese e orientato alla fissazione di appuntamenti.\n\n## La tua missione\n\n1. **Accogliere il cliente** in modo caloroso e professionale\n2. **Comprendere le sue esigenze** riguardo agli arredi da giardino (pergole, gazebo, tavoli, sedie, ombrelloni, ecc.)\n3. **Raccogliere informazioni essenziali**: Nome completo, Email, Telefono\n4. **Proporre date e orari** per un appuntamento presso il nostro showroom o per un sopralluogo\n5. **Confermare l'appuntamento** una volta concordato con il cliente\n6. **Usare gli strumenti** a disposizione per salvare i dati e creare eventi\n\n## Strumenti a disposizione\n\n- **Think**: Usalo per riflettere sulla conversazione e decidere il prossimo passo\n- **Salva Lead**: Usalo quando hai raccolto Nome, Email, Telefono e note sulla richiesta\n- **Crea Appuntamento**: Usalo quando hai concordato data e ora con il cliente\n\n## Regole importanti\n\n- Sii sempre cortese, professionale e disponibile\n- Non inventare disponibilità: proponi alcuni slot orari (es. mattina 10:00-12:00, pomeriggio 15:00-17:00) e chiedi la preferenza del cliente\n- Conferma sempre i dettagli prima di creare l'appuntamento\n- Gli appuntamenti possono essere presso il nostro showroom o a domicilio per sopralluoghi\n- Se il cliente ha domande sui prodotti, rispondi in modo generale e proponi l'appuntamento per una consulenza dettagliata\n\n📘 Lunardi & Forni – Descrizione Aziendale Completa\n\nLunardi & Forni srls è un’azienda italiana con oltre 35 anni di esperienza nel settore dell’arredo per esterni: pergole, vetrate, tende, gazebi e soluzioni su misura per residenze, attività commerciali e hospitality. Si occupa di progettazione, produzione ed installazione, seguendo il cliente in tutte le fasi, dal sopralluogo gratuito al collaudo finale.\n\nPer ogni prodotto offriamo:\n\nSopralluogo e preventivo gratuito\n\nInstallazione rapida e professionale\n\nAssistenza specializzata anche post-vendita\n\nGaranzia estesa sui prodotti\n\nPagamenti personalizzati su richiesta\nTutti i prodotti sono Made in Italy, curati nel design e nei materiali.\n\n🛠️ Prodotti & Soluzioni – Dettaglio Completo\n🧱 1) Pergole Bioclimatiche\n\nStrutture con lamelle orientabili, disponibili addossate o autoportanti, per vivere gli spazi esterni in ogni stagione con controllo di sole, pioggia e ventilazione. Puoi integrarci luci, tende o vetrate panoramiche.\n\n🪟 2) Vetrate Panoramiche\n\nChiusure scorrevoli e trasparenti ideali per:\n\nterrazze\n\nporticati\n\ngiardini\n\nOffrono:\n✔️ protezione da vento e pioggia\n✔️ maggior comfort termico\n✔️ continuità visiva con l’esterno\n✔️ apertura totale per areazione\nPerfette anche abbinate ad altre strutture come pergole e porticati.\n\n☀️ 3) Pergole Addossate\n\nPergole in alluminio o acciaio fissate a muro con coperture:\n\ninclinate\n\nscorrevoli\n\nautomatiche\noffrono un nuovo spazio protetto e funzionale da vivere tutto l’anno. Ideali per abitazioni e locali commerciali.\n\n🧰 4) Pergola Mob\n\nStruttura esterna con pannelli apribili fino al 75%, perfetta per terrazzi, verande, giardini o dehors. Offre protezione dalle intemperie e massimo comfort con design e funzionalità.\n\n🏛️ 5) Mob In Vetro\n\nVersione di pergola con vetro trasparente, che si apre fino al 75% e combina:\n✅ massima luminosità\n✅ protezione da vento, pioggia, sole\n✅ eleganza visiva e comfort\nIdeale per chi vuole unire estetica e funzionalità.\n\n🎪 6) Linea Gazebi\n\nGazebi modulari in alluminio o acciaio con coperture:\n\nPVC ignifugo\n\nSoltis microforato\n\nPannelli frangivento\nPensati per giardini, terrazze grandi o piccole, aree piscine, eventi e locali.\n\n🌞 7) Tende da Sole\n\nAmpia selezione di tende:\n✔️ a bracci\n✔️ a caduta\n✔️ cappottine\nin tessuti esclusivamente Tempotest Made in Italy, disponibili con motorizzazione o a comando manuale.\n\n🚗 8) Linea Parking Fotovoltaico\n\nSoluzione innovativa che unisce copertura, estetica e produzione energetica: pergole che orientano automaticamente i pannelli fotovoltaici verso il sole per massimizzare la resa.\n\n🚘 9) Cover Car / Garage\n\nStrutture robuste e curate per la protezione di auto e veicoli da agenti atmosferici.\n\n🦟 10) Zanzariere per Porte e Finestre\n\nSoluzioni efficaci per escludere insetti e piccoli animali, adattabili a porte e finestre di varie tipologie.\n\n💡 Vantaggi Aggiuntivi & Bonus\n\n🔥 Bonus Casa 50% e altre agevolazioni fiscali possono essere applicabili a prodotti come:\n\npergole bioclimatiche\n\ntende da sole\n\nvetrate panoramiche\n\nQueste soluzioni possono rientrare nei bonus ristrutturazione e detrazioni previste dalla normativa italiana.\n\n🔧 Servizi e Garanzie\n\n🏁 Sopralluogo gratuito\n💡 Consulenza personalizzata\n🔧 Installazione professionale rapida\n📞 Assistenza tecnica dedicata\n🛡️ Garanzia totale sui prodotti e interventi post-vendita\n💳 Pagamenti personalizzati su richiesta\n\nTutto questo serve a garantire un’esperienza senza pensieri dal primo contatto fino alla post-installazione.\n\n📌 Call to Action per l’Autoresponditore\n\n👉 Vuoi un sopralluogo gratuito completo di preventivo personalizzato?\n👉 Vuoi sapere quali bonus fiscali puoi sfruttare sul tuo prodotto?\n👉 Vuoi vedere esempi reali di installazioni già eseguite?\n\n- **Azienda**: Lunardi e Forni\n- **Settore**: Vendita e montaggio arredi da giardino\n- **Orari showroom**: Lunedì-Venerdì 9:00-12:30 / 14:30-18:30, Sabato 9:00-12:30\n\n## Dati cliente correnti\n\n- Nome: {{ $json.customerName }}\n\n- Data/ora corrente: {{ $now.format('dd/MM/yyyy HH:mm') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        4144,
+        -368
+      ],
+      "id": "8c8348c7-2ea5-4d77-a052-249f18aca3c4",
+      "name": "Agente Customer Service"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        4016,
+        -96
+      ],
+      "id": "3a278e96-d88e-498d-aa45-79caff21e43a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "8k2YJt0EMNREEcGM",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        4432,
+        -80
+      ],
+      "id": "197a0b00-2a10-4e57-bd37-e8bb99d0ca98",
+      "name": "Think",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## 1. Ricezione Messaggio WhatsApp\n\n**Configurazione necessaria:**\n- Configura il webhook con il tuo provider WhatsApp Business API\n- L'URL webhook sarà fornito da n8n dopo l'attivazione\n\n**Dati attesi:**\n- `body.type`: \"text\" o \"audio\"\n- `body.text`: il messaggio (se testo)\n- `body.audioUrl`: URL audio (se vocale)\n- `body.from`: numero telefono\n- `body.name`: nome contatto",
+        "height": 536,
+        "width": 580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2096,
+        -720
+      ],
+      "id": "fae0840e-0622-4680-a4bb-9521844f742f",
+      "name": "Sticky Note - Webhook"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Analisi Tipo Messaggio\n\nIl workflow gestisce due tipologie:\n- **Audio**: viene scaricato e trascritto\n- **Testo**: passa direttamente all'agente",
+        "height": 440,
+        "width": 384,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        -624
+      ],
+      "id": "4ee07ae3-ac5c-43e5-aa95-7533dc0a5400",
+      "name": "Sticky Note - Switch"
+    },
+    {
+      "parameters": {
+        "content": "## 3. Trascrizione Audio\n\n**Configurazione necessaria:**\n- Aggiungi le credenziali OpenAI nel nodo \"Trascrivi Audio\"\n\nL'audio viene trascritto in italiano usando Whisper",
+        "height": 360,
+        "width": 648,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3216,
+        -672
+      ],
+      "id": "01fed09e-86cc-4dc4-ad11-21e030c03803",
+      "name": "Sticky Note - Trascrizione"
+    },
+    {
+      "parameters": {
+        "content": "## 4. Agente Customer Service\n\n**Configurazione necessaria:**\n- Collega OpenAI API (modello GPT-4o-mini)\n- L'agente gestisce la conversazione e usa gli strumenti\n\n**Funzionalità:**\n- Raccoglie dati cliente\n- Propone appuntamenti\n- Salva lead e crea eventi calendario",
+        "height": 428,
+        "width": 456,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        -640
+      ],
+      "id": "9c3f563e-2b83-4016-b4cc-9df21c31b95b",
+      "name": "Sticky Note - Agente"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ]
+      },
+      "type": "n8n-nodes-whapi.whapiTrigger",
+      "typeVersion": 1,
+      "position": [
+        2368,
+        -528
+      ],
+      "id": "b2622bf8-01e2-4d70-b442-af7338b50222",
+      "name": "Whapi Trigger",
+      "webhookId": "d1e21389-5170-43e9-8326-402271eb36c0",
+      "credentials": {
+        "whapiChannelApi": {
+          "id": "yFF0mPWOpRp1Rvr4",
+          "name": "Whapi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 3,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "d3059f99-00d6-4456-b706-44b32611bda4",
+              "leftValue": "={{ $json.messages[0].from }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "=393938955524"
+            },
+            {
+              "id": "0f93984a-85e7-448f-9ef9-d6d6671708f0",
+              "leftValue": "={{ $json.messages[0].from }}",
+              "rightValue": "393807577669",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "a88a7627-9d63-4073-ac1d-8ee9859b7d61",
+              "leftValue": "={{ $json.messages[0].from }}",
+              "rightValue": "39393807577669",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "e3783886-f6c7-4826-a6a8-9efde049de9e",
+      "name": "If",
+      "position": [
+        2768,
+        -352
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "it"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3472,
+        -496
+      ],
+      "id": "2202c1f5-dc10-4d48-9dda-09e3adcee4f4",
+      "name": "Trascrivi Audio1",
+      "credentials": {
+        "openAiApi": {
+          "id": "8k2YJt0EMNREEcGM",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "to": "={{ $('Whapi Trigger').item.json.messages[0].from }}",
+        "typing_time": 2,
+        "body": "={{ $json.output }}"
+      },
+      "type": "n8n-nodes-whapi.whapi",
+      "typeVersion": 1,
+      "position": [
+        4544,
+        -368
+      ],
+      "id": "58f8f87d-6162-4ded-bf5f-bc315ddd88af",
+      "name": "Send the message",
+      "credentials": {
+        "whapiChannelApi": {
+          "id": "yFF0mPWOpRp1Rvr4",
+          "name": "Whapi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Whapi Trigger').item.json.messages[0].from }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        4208,
+        -48
+      ],
+      "id": "5cf9746f-6d34-418f-83fe-a6341c0fc033",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "hwtYEcUGezoDhDlO",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tipo Messaggio": {
+      "main": [
+        [
+          {
+            "node": "Download Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepara Dati Testo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Audio": {
+      "main": [
+        [
+          {
+            "node": "Trascrivi Audio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara Dati Trascritti": {
+      "main": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara Dati Testo": {
+      "main": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Customer Service": {
+      "main": [
+        [
+          {
+            "node": "Send the message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Whapi Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Tipo Messaggio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trascrivi Audio1": {
+      "main": [
+        [
+          {
+            "node": "Prepara Dati Trascritti",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "errorWorkflow": "",
+    "timezone": "Europe/Rome",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "binaryMode": "separate"
+  },
+  "versionId": "02ce4874-da9a-4a90-af1b-24f75e085470",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cc40ab904c04558b2f0ce71fa1ffeea26fd1aa52345c1d1117719f50d2adbac0"
+  },
+  "id": "TdUz3c0I5V5lPQ9m",
+  "tags": []
+}

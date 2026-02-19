@@ -1,0 +1,1000 @@
+{
+  "name": "test L&F 2",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3d980878-7d13-4018-bed5-8ccbd7f6d2b4",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "contact",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "contatto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "08b08942-cd5b-49ba-a1eb-2be06d1136bf",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "poll",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sondaggio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ce29e09a-40e9-4bd3-ba8a-af40bd3a9645",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "event",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "evento"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6dbd7a80-74f4-4ba1-b792-60aeeb61487b",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "location",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "posizione"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e810a956-28b8-489d-9acc-f038b63f3a82",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "live_location",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "posizion_real_time"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "56170acb-270e-4822-b449-e4561c41fba9",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "documento"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c251f66e-c4f0-44c2-a186-5fab77b040ff",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "video",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "80bea062-bef3-4eed-88b6-6ed17632fdaf",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "short",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "short"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "20a85a52-a5c5-4994-bd2d-1d6e8a6c27a4",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "gif",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "gif"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fecd547c-a8bb-4e55-950d-88f4ac7c870f",
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "immagine"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "11cede8a-f399-4b42-a04c-730eb0b730a9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messages[0].type }}",
+                    "rightValue": "=voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "701fcbe7-6b70-4656-a88f-1b23142fde97"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fae96e31-0f1b-4923-9f58-0e32ccc755ff",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2864,
+        -720
+      ],
+      "id": "f93a5ce7-62fb-403d-b298-cc1af1b52719",
+      "name": "Tipo Messaggio"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.messages[0].voice.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3264,
+        144
+      ],
+      "id": "eb29b9d3-d914-45c0-8310-e44bf70d60c3",
+      "name": "Download Audio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-assignment",
+              "name": "messageText",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        144
+      ],
+      "id": "a5046db2-6b7e-43ab-a0b4-adfafd222383",
+      "name": "Prepara Dati Trascritti"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-assignment",
+              "name": "messageText",
+              "value": "={{ $json.messages[0].text.body }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3456,
+        -208
+      ],
+      "id": "37e5e671-ed70-4d4b-8599-07c6a548ed23",
+      "name": "Prepara Dati Testo"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messageText }}",
+        "options": {
+          "systemMessage": "=# Panoramica\n\nSei un assistente customer service per **Lunardi e Forni**, un'azienda specializzata nella vendita e nel montaggio di arredi da giardino di alta qualità. Il tuo obiettivo è fornire un servizio professionale, cortese e orientato alla fissazione di appuntamenti.\n\n## La tua missione\n\n1. **Accogliere il cliente** in modo caloroso e professionale\n2. **Comprendere le sue esigenze** riguardo agli arredi da giardino (pergole, gazebo, tavoli, sedie, ombrelloni, ecc.)\n3. **Raccogliere informazioni essenziali**: Nome completo, Email, Telefono\n4. **Proporre date e orari** per un appuntamento presso il nostro showroom o per un sopralluogo\n5. **Confermare l'appuntamento** una volta concordato con il cliente\n6. **Usare gli strumenti** a disposizione per salvare i dati e creare eventi\n\n## Strumenti a disposizione\n\n- **Think**: Usalo per riflettere sulla conversazione e decidere il prossimo passo\n- **Salva Lead**: Usalo quando hai raccolto Nome, Email, Telefono e note sulla richiesta\n- **Crea Appuntamento**: Usalo quando hai concordato data e ora con il cliente\n\n## Regole importanti\n\n- Sii sempre cortese, professionale e disponibile\n- Non inventare disponibilità: proponi alcuni slot orari (es. mattina 10:00-12:00, pomeriggio 15:00-17:00) e chiedi la preferenza del cliente\n- Conferma sempre i dettagli prima di creare l'appuntamento\n- Gli appuntamenti possono essere presso il nostro showroom o a domicilio per sopralluoghi\n- Se il cliente ha domande sui prodotti, rispondi in modo generale e proponi l'appuntamento per una consulenza dettagliata\n\n📘 Lunardi & Forni – Descrizione Aziendale Completa\n\nLunardi & Forni srls è un’azienda italiana con oltre 35 anni di esperienza nel settore dell’arredo per esterni: pergole, vetrate, tende, gazebi e soluzioni su misura per residenze, attività commerciali e hospitality. Si occupa di progettazione, produzione ed installazione, seguendo il cliente in tutte le fasi, dal sopralluogo gratuito al collaudo finale.\n\nPer ogni prodotto offriamo:\n\nSopralluogo e preventivo gratuito\n\nInstallazione rapida e professionale\n\nAssistenza specializzata anche post-vendita\n\nGaranzia estesa sui prodotti\n\nPagamenti personalizzati su richiesta\nTutti i prodotti sono Made in Italy, curati nel design e nei materiali.\n\n🛠️ Prodotti & Soluzioni – Dettaglio Completo\n🧱 1) Pergole Bioclimatiche\n\nStrutture con lamelle orientabili, disponibili addossate o autoportanti, per vivere gli spazi esterni in ogni stagione con controllo di sole, pioggia e ventilazione. Puoi integrarci luci, tende o vetrate panoramiche.\n\n🪟 2) Vetrate Panoramiche\n\nChiusure scorrevoli e trasparenti ideali per:\n\nterrazze\n\nporticati\n\ngiardini\n\nOffrono:\n✔️ protezione da vento e pioggia\n✔️ maggior comfort termico\n✔️ continuità visiva con l’esterno\n✔️ apertura totale per areazione\nPerfette anche abbinate ad altre strutture come pergole e porticati.\n\n☀️ 3) Pergole Addossate\n\nPergole in alluminio o acciaio fissate a muro con coperture:\n\ninclinate\n\nscorrevoli\n\nautomatiche\noffrono un nuovo spazio protetto e funzionale da vivere tutto l’anno. Ideali per abitazioni e locali commerciali.\n\n🧰 4) Pergola Mob\n\nStruttura esterna con pannelli apribili fino al 75%, perfetta per terrazzi, verande, giardini o dehors. Offre protezione dalle intemperie e massimo comfort con design e funzionalità.\n\n🏛️ 5) Mob In Vetro\n\nVersione di pergola con vetro trasparente, che si apre fino al 75% e combina:\n✅ massima luminosità\n✅ protezione da vento, pioggia, sole\n✅ eleganza visiva e comfort\nIdeale per chi vuole unire estetica e funzionalità.\n\n🎪 6) Linea Gazebi\n\nGazebi modulari in alluminio o acciaio con coperture:\n\nPVC ignifugo\n\nSoltis microforato\n\nPannelli frangivento\nPensati per giardini, terrazze grandi o piccole, aree piscine, eventi e locali.\n\n🌞 7) Tende da Sole\n\nAmpia selezione di tende:\n✔️ a bracci\n✔️ a caduta\n✔️ cappottine\nin tessuti esclusivamente Tempotest Made in Italy, disponibili con motorizzazione o a comando manuale.\n\n🚗 8) Linea Parking Fotovoltaico\n\nSoluzione innovativa che unisce copertura, estetica e produzione energetica: pergole che orientano automaticamente i pannelli fotovoltaici verso il sole per massimizzare la resa.\n\n🚘 9) Cover Car / Garage\n\nStrutture robuste e curate per la protezione di auto e veicoli da agenti atmosferici.\n\n🦟 10) Zanzariere per Porte e Finestre\n\nSoluzioni efficaci per escludere insetti e piccoli animali, adattabili a porte e finestre di varie tipologie.\n\n💡 Vantaggi Aggiuntivi & Bonus\n\n🔥 Bonus Casa 50% e altre agevolazioni fiscali possono essere applicabili a prodotti come:\n\npergole bioclimatiche\n\ntende da sole\n\nvetrate panoramiche\n\nQueste soluzioni possono rientrare nei bonus ristrutturazione e detrazioni previste dalla normativa italiana.\n\n🔧 Servizi e Garanzie\n\n🏁 Sopralluogo gratuito\n💡 Consulenza personalizzata\n🔧 Installazione professionale rapida\n📞 Assistenza tecnica dedicata\n🛡️ Garanzia totale sui prodotti e interventi post-vendita\n💳 Pagamenti personalizzati su richiesta\n\nTutto questo serve a garantire un’esperienza senza pensieri dal primo contatto fino alla post-installazione.\n\n📌 Call to Action per l’Autoresponditore\n\n👉 Vuoi un sopralluogo gratuito completo di preventivo personalizzato?\n👉 Vuoi sapere quali bonus fiscali puoi sfruttare sul tuo prodotto?\n👉 Vuoi vedere esempi reali di installazioni già eseguite?\n\n- **Azienda**: Lunardi e Forni\n- **Settore**: Vendita e montaggio arredi da giardino\n- **Orari showroom**: Lunedì-Venerdì 9:00-12:30 / 14:30-18:30, Sabato 9:00-12:30\n\n## Dati cliente correnti\n\n- Nome: {{ $('Whapi Trigger').item.json.messages[0].from_name }}\n\n- Data/ora corrente: {{ $now.format('dd/MM/yyyy HH:mm') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        4144,
+        -368
+      ],
+      "id": "904e4625-0d96-4bcd-b16b-127937a9feff",
+      "name": "Agente Customer Service"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        4016,
+        -96
+      ],
+      "id": "075f96a3-8a13-486b-a98e-7cd98159400e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "8k2YJt0EMNREEcGM",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        4432,
+        -80
+      ],
+      "id": "cb88ea88-1f79-47b6-89bf-a391566a48e0",
+      "name": "Think",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## 2. Analisi Tipo Messaggio\n\nIl workflow gestisce due tipologie:\n- **Audio**: viene scaricato e trascritto\n- **Testo**: passa direttamente all'agente\n- **documento**: viene scaricato all'agente\n- **immagine**:  viene scaricato all'agente\n",
+        "height": 328,
+        "width": 560,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        -768
+      ],
+      "id": "b2883fd6-feb2-406a-ae24-0ea21944a946",
+      "name": "Sticky Note - Switch"
+    },
+    {
+      "parameters": {
+        "content": "## 3. Trascrizione Audio\n\n**Configurazione necessaria:**\n- Aggiungi le credenziali OpenAI nel nodo \"Trascrivi Audio\"\n\nL'audio viene trascritto in italiano usando Whisper",
+        "height": 392,
+        "width": 648,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        -32
+      ],
+      "id": "7ed030a5-3950-4fb5-a596-f2c1ae51872f",
+      "name": "Sticky Note - Trascrizione"
+    },
+    {
+      "parameters": {
+        "content": "## 4. Agente Customer Service\n\n**Configurazione necessaria:**\n- Collega OpenAI API (modello GPT-4o-mini)\n- L'agente gestisce la conversazione e usa gli strumenti\n\n**Funzionalità:**\n- Raccoglie dati cliente\n- Propone appuntamenti\n- Salva lead e crea eventi calendario",
+        "height": 428,
+        "width": 456,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        -640
+      ],
+      "id": "b53f9a2e-b4a7-407e-a473-b5a708429615",
+      "name": "Sticky Note - Agente"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ]
+      },
+      "type": "n8n-nodes-whapi.whapiTrigger",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        -480
+      ],
+      "id": "db48c459-1a39-4bc5-97b3-f6e8f6ca7f6b",
+      "name": "Whapi Trigger",
+      "webhookId": "a2f46586-aafe-46e2-a311-583591343a2a",
+      "notesInFlow": false,
+      "credentials": {
+        "whapiChannelApi": {
+          "id": "yFF0mPWOpRp1Rvr4",
+          "name": "Whapi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 3,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "d3059f99-00d6-4456-b706-44b32611bda4",
+              "leftValue": "={{ $json.messages[0].from }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "=393938955524"
+            },
+            {
+              "id": "0f93984a-85e7-448f-9ef9-d6d6671708f0",
+              "leftValue": "={{ $json.messages[0].from }}",
+              "rightValue": "393807577669",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "a88a7627-9d63-4073-ac1d-8ee9859b7d61",
+              "leftValue": "={{ $json.messages[0].from }}",
+              "rightValue": "39393807577669",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "1cd1e3bd-cf53-46a4-9e71-3b1a081d3a75",
+      "name": "If",
+      "position": [
+        2512,
+        -256
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "it"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3456,
+        144
+      ],
+      "id": "7a872bb1-28c5-4771-a917-7492693cd192",
+      "name": "Trascrivi Audio1",
+      "credentials": {
+        "openAiApi": {
+          "id": "8k2YJt0EMNREEcGM",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "to": "={{ $('Whapi Trigger').item.json.messages[0].from }}",
+        "typing_time": 2,
+        "body": "={{ $json.output }}"
+      },
+      "type": "n8n-nodes-whapi.whapi",
+      "typeVersion": 1,
+      "position": [
+        4544,
+        -368
+      ],
+      "id": "006cd6c8-849f-4b91-bfb3-dd9f624349c9",
+      "name": "Send the message",
+      "credentials": {
+        "whapiChannelApi": {
+          "id": "yFF0mPWOpRp1Rvr4",
+          "name": "Whapi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Whapi Trigger').item.json.messages[0].from }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        4208,
+        -48
+      ],
+      "id": "4e81e621-c18b-4ccf-a099-9cdefe1eaf3b",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "hwtYEcUGezoDhDlO",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. \nfiltra numeri per adesso usa solo alcuni per test",
+        "height": 240,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        -368
+      ],
+      "id": "6185a867-50bb-4b27-872f-e858edc0b84b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "cerca di essere dettagliato e spiega l'immagine in modo descrittivo e completo",
+        "imageUrls": "={{ $json.messages[0].image.link }}",
+        "simplify": false,
+        "options": {
+          "detail": "auto",
+          "maxTokens": 4000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3488,
+        -432
+      ],
+      "id": "5f1db940-4411-4e2b-8293-682a0fde5213",
+      "name": "Trascrivi Audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "8k2YJt0EMNREEcGM",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.messages[0].voice.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3280,
+        -672
+      ],
+      "id": "528f934e-307d-4565-b0ea-39e4c1938c3a",
+      "name": "Download documento"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.messages[0].image.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3280,
+        -432
+      ],
+      "id": "4c8f37f7-8e3b-4d9a-b939-b435d46d05bb",
+      "name": "Download image video"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3488,
+        -672
+      ],
+      "id": "7428d488-9951-4527-b0b5-6618e44623fa",
+      "name": "analizza immagine video",
+      "credentials": {
+        "openAiApi": {
+          "id": "8k2YJt0EMNREEcGM",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-assignment",
+              "name": "messageText",
+              "value": "=User image description: {{ $json.choices[0].message.content }}\n\nUser image caption: {{ $('Whapi Trigger').item.json.messages[0].image.caption }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3664,
+        -432
+      ],
+      "id": "82409bf7-7919-411a-9131-2763e294af2f",
+      "name": "Prepara Dati Testo1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tipo Messaggio": {
+      "main": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [
+          {
+            "node": "Download documento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download image video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download image video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download image video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download image video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepara Dati Testo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Download Audio": {
+      "main": [
+        [
+          {
+            "node": "Trascrivi Audio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara Dati Trascritti": {
+      "main": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara Dati Testo": {
+      "main": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Customer Service": {
+      "main": [
+        [
+          {
+            "node": "Send the message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Whapi Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Tipo Messaggio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trascrivi Audio1": {
+      "main": [
+        [
+          {
+            "node": "Prepara Dati Trascritti",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download documento": {
+      "main": [
+        [
+          {
+            "node": "analizza immagine video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download image video": {
+      "main": [
+        [
+          {
+            "node": "Trascrivi Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trascrivi Audio": {
+      "main": [
+        [
+          {
+            "node": "Prepara Dati Testo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara Dati Testo1": {
+      "main": [
+        [
+          {
+            "node": "Agente Customer Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "errorWorkflow": "",
+    "timezone": "Europe/Rome",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "binaryMode": "separate"
+  },
+  "versionId": "cfe64cb0-2660-4ebc-9742-64fea6f70a5a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cc40ab904c04558b2f0ce71fa1ffeea26fd1aa52345c1d1117719f50d2adbac0"
+  },
+  "id": "EDwNtvOvvsJO71cW",
+  "tags": []
+}
