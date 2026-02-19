@@ -1,1 +1,1 @@
-fix(css): rimosso reset globale * {padding:0;margin:0} che sovrascriveva Tailwind v4
+fix(css): riscrittura globals.css - tutti stili in @layer base, variabili mancanti aggiunte

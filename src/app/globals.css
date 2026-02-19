@@ -9,7 +9,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* === Variabili tema ProjectFlow === */
+/* === Variabili tema ProjectFlow (dark-only) === */
 :root {
   /* Sfondo e superfici */
   --pf-bg-primary: #0c0c0c;
@@ -17,6 +17,10 @@
   --pf-bg-elevated: #1a1a1a;
   --pf-bg-hover: rgba(255, 255, 255, 0.02);
   --pf-bg-active: rgba(255, 255, 255, 0.04);
+
+  /* Superfici per componenti */
+  --pf-surface-secondary: #161616;
+  --pf-surface-tertiary: #1e1e1e;
 
   /* Bordi */
   --pf-border: #222222;
@@ -29,7 +33,7 @@
   --pf-text-muted: #555555;
   --pf-text-disabled: #333333;
 
-  /* Accenti — il verde brand è l'accento primario */
+  /* Accenti */
   --pf-accent-primary: #1b8c3a;
   --pf-accent-primary-light: #24a847;
   --pf-accent-primary-subtle: rgba(27, 140, 58, 0.12);
@@ -53,8 +57,9 @@
   --pf-duration-fast: 200ms;
   --pf-duration-normal: 300ms;
   --pf-duration-slow: 400ms;
+
+  /* shadcn dark-only */
   --radius: 0.625rem;
-  /* shadcn dark-only — valori scuri direttamente in :root */
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
@@ -139,71 +144,66 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-/* === Body base === */
-html {
-  color-scheme: dark;
-}
-
-body {
-  background-color: var(--pf-bg-primary);
-  color: var(--pf-text-primary);
-  font-family: "Outfit", sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* === Scrollbar personalizzata === */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--pf-bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--pf-border);
-  border-radius: var(--pf-radius-pill);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--pf-text-muted);
-}
-
-/* === Selezione testo === */
-::selection {
-  background: var(--pf-accent-primary-subtle);
-  color: var(--pf-text-primary);
-}
-
-/* === Focus visibile accessibile === */
-:focus-visible {
-  outline: 2px solid var(--pf-border-focus);
-  outline-offset: 2px;
-}
-
-/* === Link base === */
-a {
-  color: var(--pf-accent-primary);
-  text-decoration: none;
-  transition: color var(--pf-duration-fast) var(--pf-easing);
-}
-
-a:hover {
-  color: var(--pf-accent-primary-light);
-}
-
-/* Dark-only: variabili dark già in :root, blocco .dark rimosso */
-
+/* === TUTTO dentro @layer base — così le utility di Tailwind hanno priorità === */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
+  html {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-foreground;
+    background-color: var(--pf-bg-primary);
+    color: var(--pf-text-primary);
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar personalizzata */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--pf-bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--pf-border);
+    border-radius: var(--pf-radius-pill);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--pf-text-muted);
+  }
+
+  /* Selezione testo */
+  ::selection {
+    background: var(--pf-accent-primary-subtle);
+    color: var(--pf-text-primary);
+  }
+
+  /* Focus visibile accessibile */
+  :focus-visible {
+    outline: 2px solid var(--pf-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Link base */
+  a {
+    color: var(--pf-accent-primary);
+    text-decoration: none;
+    transition: color var(--pf-duration-fast) var(--pf-easing);
+  }
+
+  a:hover {
+    color: var(--pf-accent-primary-light);
   }
 }
