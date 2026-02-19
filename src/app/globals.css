@@ -139,15 +139,7 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-/* === Reset base e body === */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* === Body base === */
 html {
   color-scheme: dark;
 }
@@ -210,6 +202,7 @@ a:hover {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

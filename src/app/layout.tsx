@@ -47,8 +47,8 @@ export default function RootLayout({
         },
       }}
     >
-      <html lang="it" className="dark">
-        <body className={`${outfit.variable} antialiased`}>
+      <html lang="it" className="dark" suppressHydrationWarning>
+        <body className={`${outfit.variable} antialiased`} suppressHydrationWarning>
           <ProviderQuery>
             <TooltipProvider>
               {children}

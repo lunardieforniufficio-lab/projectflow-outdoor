@@ -1,1 +1,1 @@
-fix(css): dark-only theme - variabili shadcn scure in :root, rimosso blocco .dark
+fix(css): rimosso reset globale * {padding:0;margin:0} che sovrascriveva Tailwind v4
