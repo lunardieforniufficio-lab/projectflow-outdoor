@@ -7,9 +7,9 @@
 ## Stato Attuale
 
 ```
-BLOCCO CORRENTE: 0 — Setup Infrastruttura ✅ COMPLETATO
+BLOCCO CORRENTE: 1 — Fondamenta Codice (7/10 completati)
 ULTIMA MILESTONE: v0.0.1
-ULTIMO COMMIT: fce03b0
+ULTIMO COMMIT: 0749487
 ```
 
 ---
@@ -39,13 +39,13 @@ ULTIMO COMMIT: fce03b0
 
 | # | Task | Stato | Commit |
 |---|------|-------|--------|
-| 1.1 | `types/` — tutti i tipi TypeScript (cantiere, cliente, config, ai...) | ⬜ | |
-| 1.2 | `lib/validations.ts` — schemi Zod (CF, telefono, IBAN, email, valuta) | ⬜ | |
-| 1.3 | `lib/api.ts` — client API generico (fetch wrapper per n8n) | ⬜ | |
-| 1.4 | `lib/export-utils.ts` — generazione CSV, Excel, JSON | ⬜ | |
-| 1.5 | `hooks/use-configurazione.ts` — hook config da DB (CRITICO) | ⬜ | |
-| 1.6 | `hooks/use-role.ts` — hook ruolo utente da Clerk + DB | ⬜ | |
-| 1.7 | `stores/ui-store.ts` + `stores/config-store.ts` | ⬜ | |
+| 1.1 | `types/` — tutti i tipi TypeScript (cantiere, cliente, config, ai...) | ✅ | `0749487` |
+| 1.2 | `lib/validations.ts` — schemi Zod (CF, telefono, IBAN, email, valuta) | ✅ | `0749487` |
+| 1.3 | `lib/api.ts` — client API generico (fetch wrapper per n8n) | ✅ | `0749487` |
+| 1.4 | `lib/export-utils.ts` — generazione CSV, Excel, JSON | ✅ | `0749487` |
+| 1.5 | `hooks/use-configurazione.ts` — hook config da DB (CRITICO) | ✅ | `0749487` |
+| 1.6 | `hooks/use-role.ts` — hook ruolo utente da Clerk + DB | ✅ | `0749487` |
+| 1.7 | `stores/ui-store.ts` + `stores/config-store.ts` | ✅ | `0749487` |
 | 1.8 | n8n: workflow `GET /config/:tipo` (endpoint configurazioni) | ⬜ | |
 | 1.9 | Test: hook useConfigurazione carica stati/ruoli da DB | ⬜ | |
 | 1.10 | Git tag v0.1.0 | ⬜ | |
