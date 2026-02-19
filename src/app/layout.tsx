@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { itIT } from "@clerk/localizations";
 import { Outfit } from "next/font/google";
+import { ProviderQuery } from "@/lib/provider-query";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -46,9 +47,12 @@ export default function RootLayout({
     >
       <html lang="it" className="dark">
         <body className={`${outfit.variable} antialiased`}>
-          {children}
+          <ProviderQuery>
+            {children}
+          </ProviderQuery>
         </body>
       </html>
     </ClerkProvider>
   );
 }
+

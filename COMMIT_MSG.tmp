@@ -1,1 +1,1 @@
-feat(db): setup PostgreSQL schema + seed data su VPS
+feat(core): blocco 1 - types, validations, API client, hooks, stores
