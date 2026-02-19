@@ -14,12 +14,19 @@ import { ConfermaDialog } from "@/components/ui/conferma-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { CampoCodiceFiscale } from "@/components/forms/campo-codice-fiscale";
+import { CampoTelefono } from "@/components/forms/campo-telefono";
+import { CampoIban } from "@/components/forms/campo-iban";
+import { CampoEmail } from "@/components/forms/campo-email";
+import { CampoValuta } from "@/components/forms/campo-valuta";
+import { CampoData } from "@/components/forms/campo-data";
+import { CampoSelectConfig } from "@/components/forms/campo-select-config";
+import { CampoUploadFile, type FileCaricato } from "@/components/forms/campo-upload-file";
 
 // Dati mock per la demo (in produzione verranno da DB)
 const STATI_DEMO = [
@@ -55,12 +62,29 @@ const COLONNE_EXPORT = [
     { chiave: "citta", label: "Città" },
 ];
 
+const OPZIONI_STATO_DEMO = [
+    { id: "1", label: "Lead", colore: "#3b82f6" },
+    { id: "2", label: "Vendita", colore: "#f59e0b" },
+    { id: "3", label: "Acconto", colore: "#8b5cf6" },
+    { id: "4", label: "Rilievo", colore: "#06b6d4" },
+    { id: "5", label: "Progettazione", colore: "#ec4899" },
+    { id: "6", label: "Posa", colore: "#1B8C3A" },
+];
+
 export default function PaginaDemo() {
     const [tabAttivo, setTabAttivo] = useState("tutti");
     const [ricerca, setRicerca] = useState("");
     const [confermaAperta, setConfermaAperta] = useState(false);
     const [confermaDistruttivaAperta, setConfermaDistruttivaAperta] = useState(false);
     const [progressDemo, setProgressDemo] = useState(72);
+    const [cf, setCf] = useState("");
+    const [telefono, setTelefono] = useState("");
+    const [iban, setIban] = useState("");
+    const [email, setEmail] = useState("");
+    const [importo, setImporto] = useState<number | null>(null);
+    const [data, setData] = useState<Date | null>(null);
+    const [statoSelezionato, setStatoSelezionato] = useState("");
+    const [filesCaricati, setFilesCaricati] = useState<FileCaricato[]>([]);
 
     return (
         <div className="min-h-screen bg-[var(--pf-bg-primary)] text-[var(--pf-text-primary)]">
@@ -371,6 +395,81 @@ export default function PaginaDemo() {
                             <Checkbox id="acconto" />
                             <label htmlFor="acconto" className="text-sm">Acconto 40% ricevuto</label>
                         </div>
+                    </div>
+                </SezioneDemo>
+
+                {/* === SEZIONE 12: Campi Form Validati === */}
+                <SezioneDemo
+                    titolo="Campi Form con Validazione"
+                    descrizione="Campi personalizzati con validazione integrata: CF, telefono, IBAN, email, valuta, data."
+                >
+                    <div className="grid gap-6 grid-cols-1 md:grid-cols-2 max-w-3xl">
+                        <CampoCodiceFiscale
+                            valore={cf}
+                            onCambia={setCf}
+                        />
+                        <CampoTelefono
+                            valore={telefono}
+                            onCambia={setTelefono}
+                            obbligatorio
+                        />
+                        <CampoIban
+                            valore={iban}
+                            onCambia={setIban}
+                        />
+                        <CampoEmail
+                            valore={email}
+                            onCambia={setEmail}
+                            obbligatorio
+                        />
+                        <CampoValuta
+                            valore={importo}
+                            onCambia={setImporto}
+                            label="Importo preventivo"
+                            obbligatorio
+                        />
+                        <CampoData
+                            valore={data}
+                            onCambia={setData}
+                            label="Data sopralluogo"
+                            obbligatorio
+                        />
+                    </div>
+                </SezioneDemo>
+
+                {/* === SEZIONE 13: Select Config === */}
+                <SezioneDemo
+                    titolo="Select Config (da DB)"
+                    descrizione="Select generico che carica opzioni dalla tabella config DB. I pallini colorati riflettono il colore dello stato."
+                >
+                    <div className="max-w-sm">
+                        <CampoSelectConfig
+                            valore={statoSelezionato}
+                            onCambia={setStatoSelezionato}
+                            label="Stato cantiere"
+                            opzioni={OPZIONI_STATO_DEMO}
+                            obbligatorio
+                        />
+                        {statoSelezionato && (
+                            <p className="mt-2 text-sm text-[var(--pf-text-muted)]">
+                                Selezionato: <code className="text-[var(--pf-accent-primary)]">{statoSelezionato}</code>
+                            </p>
+                        )}
+                    </div>
+                </SezioneDemo>
+
+                {/* === SEZIONE 14: Upload File === */}
+                <SezioneDemo
+                    titolo="Upload File"
+                    descrizione="Drag & drop con react-dropzone. Anteprima immagini, validazione tipo e dimensione."
+                >
+                    <div className="max-w-lg">
+                        <CampoUploadFile
+                            files={filesCaricati}
+                            onFilesChange={setFilesCaricati}
+                            label="Foto rilievo"
+                            maxFiles={5}
+                        />
                     </div>
                 </SezioneDemo>
 
