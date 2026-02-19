@@ -21,6 +21,7 @@ import {
     X,
     LogOut,
     BarChart3,
+    UsersRound,
 } from "lucide-react";
 import { useClerk } from "@clerk/nextjs";
 import {
@@ -45,6 +46,7 @@ const tutteLeVoci: VoceNav[] = [
     { id: "clienti", label: "Clienti", icona: <Users size={20} />, href: "/clienti" },
     { id: "fornitori", label: "Fornitori", icona: <Truck size={20} />, href: "/fornitori" },
     { id: "squadre", label: "Squadre", icona: <UserCog size={20} />, href: "/squadre" },
+    { id: "organigramma", label: "Organigramma", icona: <UsersRound size={20} />, href: "/organigramma" },
     { id: "calendario", label: "Calendario", icona: <Calendar size={20} />, href: "/calendario" },
     { id: "ai", label: "AI Chat", icona: <MessageSquare size={20} />, href: "/ai" },
     { id: "report", label: "Report", icona: <BarChart3 size={20} />, href: "/report" },

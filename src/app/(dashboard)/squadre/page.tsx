@@ -1,13 +1,16 @@
-// Pagina squadre — DataTable con TanStack Table v8 + PannelloCrud laterale
+// Pagina squadre — DataTable + PannelloCrud con gestione membri dall'organigramma
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
     Users,
     Plus,
     Pencil,
     Trash2,
     Phone,
+    Search,
+    X,
+    Check,
 } from "lucide-react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
@@ -18,8 +21,9 @@ import {
     Campo,
     InputPf,
 } from "@/components/ui/pannello-crud";
-import { squadreDemo } from "@/lib/dati-mock";
+import { squadreDemo, utentiDemo } from "@/lib/dati-mock";
 import type { Squadra } from "@/types/cantiere";
+import type { UtenteDettaglio } from "@/types";
 
 // === Colori predefiniti per le squadre ===
 const coloriSquadra = [
@@ -33,28 +37,63 @@ const coloriSquadra = [
     { value: "#14b8a6", label: "Teal" },
 ];
 
+// === Tipo assegnazione membro-squadra ===
+interface MembroAssegnato {
+    utenteId: string;
+    squadraId: string;
+    ruoloSquadra: "caposquadra" | "installatore" | "altro";
+}
+
 // === Tipo form ===
 interface FormSquadra {
     nome: string;
     telefono: string;
     colore: string;
     attiva: boolean;
+    // Membri selezionati (utenteId[])
+    membroIds: string[];
 }
 
 interface ErroriForm {
     nome?: string;
 }
 
+// Utenti assegnabili alle squadre (area operativa o con ruolo caposquadra/installatore)
+const utentiOperativi = utentiDemo.filter(
+    (u) =>
+        u.attivo &&
+        (u.area?.codice === "operativa" ||
+            u.ruolo.codice === "caposquadra" ||
+            u.ruolo.codice === "installatore")
+);
+
+// === Mappa iniziale squadra → membri (mock) ===
+const membriInitiali: MembroAssegnato[] = [
+    // sq1 = Nexteam
+    { utenteId: "u12", squadraId: "sq1", ruoloSquadra: "caposquadra" }, // Francesco Sinagra
+    { utenteId: "u16", squadraId: "sq1", ruoloSquadra: "installatore" }, // Pierpaolo Giachi
+    { utenteId: "u17", squadraId: "sq1", ruoloSquadra: "installatore" }, // Francesco Ponziani
+    // sq2 = Alfateam
+    { utenteId: "u13", squadraId: "sq2", ruoloSquadra: "caposquadra" }, // Roberto Giglioni
+    { utenteId: "u18", squadraId: "sq2", ruoloSquadra: "installatore" }, // Daniele Falcetta
+    // sq3 = Team Esterni
+    { utenteId: "u14", squadraId: "sq3", ruoloSquadra: "caposquadra" }, // Leonardo Sinagra
+    { utenteId: "u15", squadraId: "sq3", ruoloSquadra: "caposquadra" }, // Antonino Sanfilippo
+    { utenteId: "u19", squadraId: "sq3", ruoloSquadra: "installatore" }, // Alessio Consales
+];
+
 const formVuoto: FormSquadra = {
     nome: "",
     telefono: "",
     colore: "#1B8C3A",
     attiva: true,
+    membroIds: [],
 };
 
 export default function PaginaSquadre() {
     // --- Dati locali (mock) ---
     const [squadre, setSquadre] = useState<Squadra[]>(squadreDemo);
+    const [membri, setMembri] = useState<MembroAssegnato[]>(membriInitiali);
 
     // --- Pannello CRUD ---
     const [pannelloAperto, setPannelloAperto] = useState(false);
@@ -64,35 +103,68 @@ export default function PaginaSquadre() {
     const [errori, setErrori] = useState<ErroriForm>({});
     const [isSalvataggio, setIsSalvataggio] = useState(false);
 
+    // --- Ricerca membri nel pannello ---
+    const [ricercaMembri, setRicercaMembri] = useState("");
+
+    // === Helpers ===
+    const getMembriSquadra = useCallback(
+        (squadraId: string): UtenteDettaglio[] =>
+            membri
+                .filter((m) => m.squadraId === squadraId)
+                .map((m) => utentiDemo.find((u) => u.id === m.utenteId)!)
+                .filter(Boolean),
+        [membri]
+    );
+
     // === Apri pannello nuova squadra ===
     const apriNuova = useCallback(() => {
         setSquadraCorrente(null);
         setModalitaModifica(false);
         setForm(formVuoto);
         setErrori({});
+        setRicercaMembri("");
         setPannelloAperto(true);
     }, []);
 
     // === Apri pannello modifica ===
-    const apriModifica = useCallback((squadra: Squadra, e?: React.MouseEvent) => {
-        e?.stopPropagation();
-        setSquadraCorrente(squadra);
-        setModalitaModifica(true);
-        setForm({
-            nome: squadra.nome,
-            telefono: squadra.telefono ?? "",
-            colore: squadra.colore ?? "#1B8C3A",
-            attiva: squadra.attiva,
-        });
-        setErrori({});
-        setPannelloAperto(true);
-    }, []);
+    const apriModifica = useCallback(
+        (squadra: Squadra, e?: React.MouseEvent) => {
+            e?.stopPropagation();
+            setSquadraCorrente(squadra);
+            setModalitaModifica(true);
+            const membroIds = membri
+                .filter((m) => m.squadraId === squadra.id)
+                .map((m) => m.utenteId);
+            setForm({
+                nome: squadra.nome,
+                telefono: squadra.telefono ?? "",
+                colore: squadra.colore ?? "#1B8C3A",
+                attiva: squadra.attiva,
+                membroIds,
+            });
+            setErrori({});
+            setRicercaMembri("");
+            setPannelloAperto(true);
+        },
+        [membri]
+    );
 
     // === Elimina squadra ===
     const eliminaSquadra = useCallback((id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         if (!confirm("Vuoi eliminare questa squadra?")) return;
         setSquadre((prev) => prev.filter((s) => s.id !== id));
+        setMembri((prev) => prev.filter((m) => m.squadraId !== id));
+    }, []);
+
+    // === Toggle membro nel form ===
+    const toggleMembro = useCallback((utenteId: string) => {
+        setForm((f) => ({
+            ...f,
+            membroIds: f.membroIds.includes(utenteId)
+                ? f.membroIds.filter((id) => id !== utenteId)
+                : [...f.membroIds, utenteId],
+        }));
     }, []);
 
     // === Validazione form ===
@@ -108,7 +180,7 @@ export default function PaginaSquadre() {
         if (!valida()) return;
         setIsSalvataggio(true);
 
-        // TODO: sostituire con chiamata API n8n
+        // TODO: chiamata API n8n
         await new Promise((r) => setTimeout(r, 600));
 
         const ora = new Date().toISOString();
@@ -127,9 +199,29 @@ export default function PaginaSquadre() {
                         : s
                 )
             );
+            // Aggiorna membri
+            setMembri((prev) => {
+                const senzaSquadra = prev.filter((m) => m.squadraId !== squadraCorrente.id);
+                const nuoviMembri: MembroAssegnato[] = form.membroIds.map((uid) => {
+                    const utente = utentiDemo.find((u) => u.id === uid);
+                    return {
+                        utenteId: uid,
+                        squadraId: squadraCorrente.id,
+                        ruoloSquadra: (
+                            utente?.ruolo.codice === "caposquadra"
+                                ? "caposquadra"
+                                : utente?.ruolo.codice === "installatore"
+                                    ? "installatore"
+                                    : "altro"
+                        ) as "caposquadra" | "installatore" | "altro",
+                    };
+                });
+                return [...senzaSquadra, ...nuoviMembri];
+            });
         } else {
+            const nuovaId = `sq${Date.now()}`;
             const nuova: Squadra = {
-                id: `sq${Date.now()}`,
+                id: nuovaId,
                 nome: form.nome.trim(),
                 responsabileId: null,
                 telefono: form.telefono.trim() || null,
@@ -138,11 +230,38 @@ export default function PaginaSquadre() {
                 creatoIl: ora,
             };
             setSquadre((prev) => [nuova, ...prev]);
+            // Aggiungi membri
+            const nuoviMembri: MembroAssegnato[] = form.membroIds.map((uid) => {
+                const utente = utentiDemo.find((u) => u.id === uid);
+                return {
+                    utenteId: uid,
+                    squadraId: nuovaId,
+                    ruoloSquadra:
+                        utente?.ruolo.codice === "caposquadra"
+                            ? "caposquadra"
+                            : utente?.ruolo.codice === "installatore"
+                                ? "installatore"
+                                : "altro",
+                };
+            });
+            setMembri((prev) => [...prev, ...nuoviMembri]);
         }
 
         setIsSalvataggio(false);
         setPannelloAperto(false);
     };
+
+    // === Utenti filtrati per ricerca nel pannello ===
+    const utentiFiltrati = useMemo(() => {
+        if (!ricercaMembri.trim()) return utentiOperativi;
+        const q = ricercaMembri.toLowerCase();
+        return utentiOperativi.filter(
+            (u) =>
+                u.nome.toLowerCase().includes(q) ||
+                u.cognome.toLowerCase().includes(q) ||
+                u.ruolo.label.toLowerCase().includes(q)
+        );
+    }, [ricercaMembri]);
 
     // === Colonne DataTable ===
     const colonne: ColumnDef<Squadra, unknown>[] = [
@@ -150,27 +269,64 @@ export default function PaginaSquadre() {
             id: "nome",
             accessorKey: "nome",
             header: "Squadra",
-            cell: ({ row }) => (
-                <div className="flex items-center gap-3">
-                    <div
-                        className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                        style={{ backgroundColor: row.original.colore ?? "#666" }}
-                    >
-                        {row.original.nome.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                        <p className="font-semibold text-sm text-[var(--pf-text-primary)]">
-                            {row.original.nome}
-                        </p>
-                        {row.original.telefono && (
-                            <p className="text-xs text-[var(--pf-text-muted)] flex items-center gap-1 mt-0.5">
-                                <Phone size={10} />
-                                {row.original.telefono}
+            cell: ({ row }) => {
+                const membroSquadra = getMembriSquadra(row.original.id);
+                return (
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                            style={{ backgroundColor: row.original.colore ?? "#666" }}
+                        >
+                            {row.original.nome.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                            <p className="font-semibold text-sm text-[var(--pf-text-primary)]">
+                                {row.original.nome}
                             </p>
-                        )}
+                            {row.original.telefono && (
+                                <p className="text-xs text-[var(--pf-text-muted)] flex items-center gap-1 mt-0.5">
+                                    <Phone size={10} />
+                                    {row.original.telefono}
+                                </p>
+                            )}
+                        </div>
                     </div>
-                </div>
-            ),
+                );
+            },
+        },
+        {
+            id: "membri",
+            header: "Membri",
+            enableSorting: false,
+            cell: ({ row }) => {
+                const membroSquadra = getMembriSquadra(row.original.id);
+                if (membroSquadra.length === 0) {
+                    return <span className="text-xs text-[var(--pf-text-muted)]">Nessun membro</span>;
+                }
+                return (
+                    <div className="flex items-center gap-1.5">
+                        {/* Avatar pile */}
+                        <div className="flex -space-x-2">
+                            {membroSquadra.slice(0, 5).map((m) => (
+                                <div
+                                    key={m.id}
+                                    title={`${m.nome} ${m.cognome} — ${m.ruolo.label}`}
+                                    className="w-7 h-7 rounded-full border-2 flex items-center justify-center text-[10px] font-bold text-white"
+                                    style={{
+                                        backgroundColor: m.ruolo.colore ?? "#666",
+                                        borderColor: "var(--pf-bg-surface)",
+                                    }}
+                                >
+                                    {m.nome[0]}{m.cognome[0]}
+                                </div>
+                            ))}
+                        </div>
+                        <span className="text-xs text-[var(--pf-text-muted)]">
+                            {membroSquadra.length} {membroSquadra.length === 1 ? "membro" : "membri"}
+                        </span>
+                    </div>
+                );
+            },
         },
         {
             id: "stato",
@@ -241,34 +397,47 @@ export default function PaginaSquadre() {
     ];
 
     // === Riga espandibile mobile ===
-    const rigaEspandibile = (s: Squadra) => (
-        <div className="px-4 py-3 text-xs space-y-2">
-            {s.telefono && (
-                <div className="flex items-center gap-2">
-                    <Phone size={12} className="text-[var(--pf-text-muted)]" />
-                    <span className="text-[var(--pf-text-secondary)]">{s.telefono}</span>
+    const rigaEspandibile = (s: Squadra) => {
+        const membroSquadra = getMembriSquadra(s.id);
+        return (
+            <div className="px-4 py-3 text-xs space-y-3">
+                {s.telefono && (
+                    <div className="flex items-center gap-2">
+                        <Phone size={12} className="text-[var(--pf-text-muted)]" />
+                        <span className="text-[var(--pf-text-secondary)]">{s.telefono}</span>
+                    </div>
+                )}
+                {membroSquadra.length > 0 && (
+                    <div>
+                        <p className="text-[var(--pf-text-muted)] mb-2">Membri ({membroSquadra.length})</p>
+                        <div className="flex flex-wrap gap-1.5">
+                            {membroSquadra.map((m) => (
+                                <span
+                                    key={m.id}
+                                    className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium"
+                                    style={{
+                                        backgroundColor: `color-mix(in srgb, ${m.ruolo.colore} 15%, transparent)`,
+                                        color: m.ruolo.colore ?? "#666",
+                                    }}
+                                >
+                                    {m.nome[0]}{m.cognome[0]} — {m.nome} {m.cognome}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                <div className="flex gap-2 pt-1">
+                    <button
+                        onClick={() => apriModifica(s)}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-colors"
+                        style={{ backgroundColor: "var(--pf-bg-hover)", color: "var(--pf-text-secondary)" }}
+                    >
+                        <Pencil size={12} /> Modifica
+                    </button>
                 </div>
-            )}
-            <div className="flex items-center gap-2">
-                <span
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: s.colore ?? "#666" }}
-                />
-                <span className="text-[var(--pf-text-muted)]">
-                    {coloriSquadra.find((c) => c.value === s.colore)?.label ?? s.colore ?? "—"}
-                </span>
             </div>
-            <div className="flex gap-2 pt-1">
-                <button
-                    onClick={() => apriModifica(s)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-colors"
-                    style={{ backgroundColor: "var(--pf-bg-hover)", color: "var(--pf-text-secondary)" }}
-                >
-                    <Pencil size={12} /> Modifica
-                </button>
-            </div>
-        </div>
-    );
+        );
+    };
 
     return (
         <div className="space-y-6">
@@ -319,14 +488,14 @@ export default function PaginaSquadre() {
                 titolo={modalitaModifica ? `Modifica ${squadraCorrente?.nome}` : "Nuova Squadra"}
                 sottotitolo={
                     modalitaModifica
-                        ? "Modifica i dati della squadra"
-                        : "Crea una nuova squadra operativa"
+                        ? "Modifica dati e composizione della squadra"
+                        : "Crea una nuova squadra e aggiungi i membri"
                 }
                 icona={<Users size={18} />}
                 coloreAccent="#3b82f6"
                 onSalva={salva}
                 isSalvataggio={isSalvataggio}
-                larghezza="md"
+                larghezza="lg"
                 labelSalva={modalitaModifica ? "Salva modifiche" : "Crea squadra"}
             >
                 {/* === Sezione 1: Dati principali === */}
@@ -359,7 +528,7 @@ export default function PaginaSquadre() {
 
                 <SeparatoreSezione />
 
-                {/* === Sezione 2: Aspetto === */}
+                {/* === Sezione 2: Colore === */}
                 <div className="space-y-4">
                     <div>
                         <h3 className="text-sm font-semibold" style={{ color: "var(--pf-text-primary)" }}>
@@ -383,10 +552,7 @@ export default function PaginaSquadre() {
                                         : "transparent",
                                 }}
                             >
-                                <span
-                                    className="w-6 h-6 rounded-full"
-                                    style={{ backgroundColor: c.value }}
-                                />
+                                <span className="w-6 h-6 rounded-full" style={{ backgroundColor: c.value }} />
                                 <span className="text-[10px]" style={{ color: "var(--pf-text-muted)" }}>
                                     {c.label}
                                 </span>
@@ -398,10 +564,7 @@ export default function PaginaSquadre() {
                     {form.nome && (
                         <div
                             className="flex items-center gap-3 p-3 rounded-lg border"
-                            style={{
-                                borderColor: "var(--pf-border)",
-                                backgroundColor: "var(--pf-bg-surface)",
-                            }}
+                            style={{ borderColor: "var(--pf-border)", backgroundColor: "var(--pf-bg-surface)" }}
                         >
                             <div
                                 className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
@@ -423,7 +586,146 @@ export default function PaginaSquadre() {
 
                 <SeparatoreSezione />
 
-                {/* === Sezione 3: Stato === */}
+                {/* === Sezione 3: Membri === */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-sm font-semibold" style={{ color: "var(--pf-text-primary)" }}>
+                                Composizione squadra
+                            </h3>
+                            <p className="text-xs mt-0.5" style={{ color: "var(--pf-text-muted)" }}>
+                                Seleziona i membri dall&apos;organigramma operativo
+                            </p>
+                        </div>
+                        {form.membroIds.length > 0 && (
+                            <span
+                                className="text-xs font-semibold px-2 py-1 rounded-full"
+                                style={{
+                                    backgroundColor: `color-mix(in srgb, #3b82f6 15%, transparent)`,
+                                    color: "#3b82f6",
+                                }}
+                            >
+                                {form.membroIds.length} selezionati
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Chips membri selezionati */}
+                    {form.membroIds.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            {form.membroIds.map((uid) => {
+                                const u = utentiDemo.find((x) => x.id === uid);
+                                if (!u) return null;
+                                return (
+                                    <span
+                                        key={uid}
+                                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                        style={{
+                                            backgroundColor: `color-mix(in srgb, ${u.ruolo.colore} 12%, transparent)`,
+                                            color: u.ruolo.colore ?? "#666",
+                                        }}
+                                    >
+                                        <span className="font-bold">{u.nome[0]}{u.cognome[0]}</span>
+                                        {u.nome} {u.cognome}
+                                        <button
+                                            onClick={() => toggleMembro(uid)}
+                                            className="ml-0.5 rounded-full hover:opacity-70 transition-opacity"
+                                        >
+                                            <X size={12} />
+                                        </button>
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {/* Ricerca + lista utenti selezionabili */}
+                    <div
+                        className="rounded-lg border overflow-hidden"
+                        style={{ borderColor: "var(--pf-border)" }}
+                    >
+                        {/* Barra ricerca */}
+                        <div
+                            className="relative border-b"
+                            style={{ borderColor: "var(--pf-border)" }}
+                        >
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--pf-text-muted)] pointer-events-none" />
+                            <input
+                                type="text"
+                                value={ricercaMembri}
+                                onChange={(e) => setRicercaMembri(e.target.value)}
+                                placeholder="Cerca per nome o ruolo..."
+                                className="w-full pl-8 pr-4 py-2.5 text-sm outline-none"
+                                style={{
+                                    backgroundColor: "var(--pf-bg-surface)",
+                                    color: "var(--pf-text-primary)",
+                                }}
+                            />
+                        </div>
+
+                        {/* Lista utenti */}
+                        <div
+                            className="max-h-64 overflow-y-auto"
+                            style={{ backgroundColor: "var(--pf-bg-primary)" }}
+                        >
+                            {utentiFiltrati.length === 0 ? (
+                                <div className="py-6 text-center text-xs" style={{ color: "var(--pf-text-muted)" }}>
+                                    Nessun utente trovato
+                                </div>
+                            ) : (
+                                utentiFiltrati.map((u) => {
+                                    const selezionato = form.membroIds.includes(u.id);
+                                    return (
+                                        <button
+                                            key={u.id}
+                                            type="button"
+                                            onClick={() => toggleMembro(u.id)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors border-b last:border-b-0"
+                                            style={{
+                                                borderColor: "var(--pf-border-light, var(--pf-border))",
+                                                backgroundColor: selezionato
+                                                    ? `color-mix(in srgb, #3b82f6 8%, var(--pf-bg-primary))`
+                                                    : "transparent",
+                                            }}
+                                        >
+                                            {/* Avatar */}
+                                            <div
+                                                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                                                style={{ backgroundColor: u.ruolo.colore ?? "#666" }}
+                                            >
+                                                {u.nome[0]}{u.cognome[0]}
+                                            </div>
+                                            {/* Info */}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium truncate" style={{ color: "var(--pf-text-primary)" }}>
+                                                    {u.nome} {u.cognome}
+                                                </p>
+                                                <p className="text-xs truncate" style={{ color: u.ruolo.colore ?? "var(--pf-text-muted)" }}>
+                                                    {u.ruolo.label}
+                                                    {u.area && ` · ${u.area.label}`}
+                                                </p>
+                                            </div>
+                                            {/* Check */}
+                                            <div
+                                                className="w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all"
+                                                style={{
+                                                    borderColor: selezionato ? "#3b82f6" : "var(--pf-border)",
+                                                    backgroundColor: selezionato ? "#3b82f6" : "transparent",
+                                                }}
+                                            >
+                                                {selezionato && <Check size={12} className="text-white" />}
+                                            </div>
+                                        </button>
+                                    );
+                                })
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <SeparatoreSezione />
+
+                {/* === Sezione 4: Stato === */}
                 <div className="space-y-3">
                     <h3 className="text-sm font-semibold" style={{ color: "var(--pf-text-primary)" }}>
                         Stato operativo

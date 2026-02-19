@@ -17,13 +17,13 @@ export const ruoliSimulabili: RuoloSimulabile[] = [
         codice: "admin",
         label: "Admin",
         colore: "#ef4444",
-        sezioniVisibili: ["dashboard", "cantieri", "kanban", "clienti", "fornitori", "squadre", "calendario", "ai", "report", "admin"],
+        sezioniVisibili: ["dashboard", "cantieri", "kanban", "clienti", "fornitori", "squadre", "organigramma", "calendario", "ai", "report", "admin"],
     },
     {
         codice: "titolare",
         label: "Titolare",
         colore: "#f59e0b",
-        sezioniVisibili: ["dashboard", "cantieri", "kanban", "clienti", "fornitori", "squadre", "calendario", "ai", "report"],
+        sezioniVisibili: ["dashboard", "cantieri", "kanban", "clienti", "fornitori", "squadre", "organigramma", "calendario", "ai", "report"],
     },
     {
         codice: "venditore",
