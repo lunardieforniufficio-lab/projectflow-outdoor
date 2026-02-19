@@ -1,12 +1,18 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+// In sviluppo: disabilita il role guard (i ruoli Clerk non sono ancora configurati)
+// TODO: rimuovere in produzione quando i metadata ruolo saranno impostati su Clerk
+const IS_SVILUPPO = process.env.NODE_ENV === "development";
+
 // Rotte pubbliche — accessibili senza autenticazione
 const isRoutaPubblica = createRouteMatcher([
     "/sign-in(.*)",
     "/sign-up(.*)",
     "/api/webhook(.*)",
     "/demo(.*)",
+    // In sviluppo: tutte le rotte sono pubbliche (Clerk non è configurato)
+    ...(IS_SVILUPPO ? ["/(.*)" ] : []),
 ]);
 
 // Rotte riservate solo ad admin
@@ -36,8 +42,8 @@ export default clerkMiddleware(async (auth, request) => {
     // Rotte admin: solo admin
     if (isRoutaAdmin(request)) {
         if (!ruolo || ruolo !== "admin") {
-            const urlLogin = new URL("/", request.url);
-            return NextResponse.redirect(urlLogin);
+            const urlHome = new URL("/", request.url);
+            return NextResponse.redirect(urlHome);
         }
     }
 
