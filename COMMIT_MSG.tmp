@@ -1,1 +1,1 @@
-style(ui): fix skeleton color (neutral) and badge padding
+fix(css): dark-only theme - variabili shadcn scure in :root, rimosso blocco .dark
