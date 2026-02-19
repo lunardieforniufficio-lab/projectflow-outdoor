@@ -7,9 +7,9 @@
 ## Stato Attuale
 
 ```
-BLOCCO CORRENTE: 5 — Layout, Pagine, Admin (parziale)
+BLOCCO CORRENTE: 5 — Layout, Pagine, Admin (avanzato)
 ULTIMA MILESTONE: v0.2.0
-ULTIMO COMMIT: 62547c8
+ULTIMO COMMIT: da completare
 ```
 
 ---
@@ -131,16 +131,16 @@ ULTIMO COMMIT: 62547c8
 
 | # | Task | Stato | Commit |
 |---|------|-------|--------|
-| 5.1 | `layouts/admin-layout.tsx` + `titolare-layout.tsx` | ⬜ | |
-| 5.2 | `layouts/venditore-layout.tsx` + `centralino-layout.tsx` | ⬜ | |
-| 5.3 | `layouts/posatore-layout.tsx` (mobile-first, caposquadra + installatore) | ⬜ | |
-| 5.4 | `layouts/tecnico-layout.tsx` + `logistica-layout.tsx` + `magazziniere-layout.tsx` | ⬜ | |
-| 5.5 | `layouts/contabilita-layout.tsx` + `amministrazione-layout.tsx` | ⬜ | |
+| 5.1 | `layouts/admin-layout.tsx` + `titolare-layout.tsx` | ✅ | |
+| 5.2 | `layouts/venditore-layout.tsx` + `centralino-layout.tsx` | ✅ | |
+| 5.3 | `layouts/posatore-layout.tsx` (mobile-first, caposquadra + installatore) | ✅ | |
+| 5.4 | `layouts/tecnico-layout.tsx` + `logistica-layout.tsx` + `magazziniere-layout.tsx` | ✅ | |
+| 5.5 | `layouts/contabilita-layout.tsx` + `amministrazione-layout.tsx` | ✅ | |
 | 5.6 | Pagine app/ con routing completo (clienti, fornitori, squadre, report, admin) | ✅ | `62547c8` |
-| 5.7 | Role guard middleware (Clerk) | ⬜ | |
+| 5.7 | Role guard middleware (Clerk) | ✅ | |
 | 5.8 | **Admin panel**: `admin/configurazioni/` — editor stati, ruoli, tipi | ✅ | `62547c8` |
 | 5.9 | **Admin panel**: `admin/utenti/` — gestione utenti organigramma | ✅ | `62547c8` |
-| 5.10 | **Admin panel**: `admin/tabelle-sistema/` — editor tabelle config DB | ⬜ | |
+| 5.10 | **Admin panel**: `admin/tabelle-sistema/` — editor tabelle config DB | ✅ | |
 | 5.11 | Migrazione calendario da GroupCal a Google Calendar | ⬜ | |
 | 5.12 | Seed utenti reali in Clerk (21 persone organigramma) | ⬜ | |
 | 5.13 | Git tag v0.5.0 | ⬜ | |
