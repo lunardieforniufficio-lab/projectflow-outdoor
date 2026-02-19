@@ -1,1 +1,1 @@
-feat(config): configurazione Clerk auth + shadcn/ui tema dark brand
+feat(db): setup PostgreSQL schema + seed data su VPS

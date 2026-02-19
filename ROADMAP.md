@@ -9,7 +9,7 @@
 ```
 BLOCCO CORRENTE: 0 — Setup Infrastruttura
 ULTIMA MILESTONE: nessuna
-ULTIMO COMMIT: 20c7299
+ULTIMO COMMIT: 8649a8b
 ```
 
 ---
@@ -21,8 +21,8 @@ ULTIMO COMMIT: 20c7299
 |---|------|-------|--------|
 | 0.1 | Init Next.js + TypeScript + Tailwind | ✅ | `20c7299` |
 | 0.2 | Installa TUTTE le dipendenze da stack | ✅ | `20c7299` |
-| 0.3 | Configura Clerk (auth) | ⬜ | |
-| 0.4 | Setup shadcn/ui + tema dark Lunardi & Forni | ⬜ | |
+| 0.3 | Configura Clerk (auth) | ✅ | `8649a8b` |
+| 0.4 | Setup shadcn/ui + tema dark Lunardi & Forni | ✅ | `8649a8b` |
 | 0.5 | Crea `globals.css` con variabili `--pf-*` | ✅ | `20c7299` |
 | 0.6 | Crea struttura cartelle completa (vuota) | ✅ | `20c7299` |
 | 0.7 | File `.env.local` con placeholder | ✅ | `20c7299` |
