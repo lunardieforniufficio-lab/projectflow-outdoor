@@ -1,1 +1,9 @@
-docs(roadmap): aggiornato stato blocco 4 con task completati
+feat(ui): aggiunte pagine CRUD clienti fornitori squadre e admin panel con configurazioni e utenti - Blocco 5
+
+- Pagina /clienti con tabella, ricerca, export
+- Pagina /fornitori con tabella, ricerca, export
+- Pagina /squadre con card grid, avatar colorati, membri
+- Pagina /admin homepage con card navigazione
+- Pagina /admin/configurazioni con tabs stati/tipi/ruoli
+- Pagina /admin/utenti con tabella organigramma e badge ruolo
+- Mock data: 11 ruoli, 9 aree aziendali, 19 utenti organigramma

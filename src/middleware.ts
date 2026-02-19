@@ -7,20 +7,11 @@ const isRoutaPubblica = createRouteMatcher([
     "/api/webhook(.*)",
     "/demo(.*)",
     // TODO: rimuovere in produzione — temporaneo per sviluppo UI
-    "/",
-    "/cantieri(.*)",
-    "/kanban(.*)",
-    "/clienti(.*)",
-    "/fornitori(.*)",
-    "/squadre(.*)",
-    "/calendario(.*)",
-    "/ai(.*)",
-    "/admin(.*)",
-    "/report(.*)",
+    "/(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
-    // Proteggi tutte le rotte tranne quelle pubbliche
+    // In sviluppo: tutte le rotte sono pubbliche
     if (!isRoutaPubblica(request)) {
         await auth.protect();
     }
@@ -34,3 +25,4 @@ export const config = {
         "/(api|trpc)(.*)",
     ],
 };
+
