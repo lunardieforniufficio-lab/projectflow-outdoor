@@ -1,1 +1,7 @@
-fix(css): riscrittura globals.css - tutti stili in @layer base, variabili mancanti aggiunte
+feat(hooks): 13 hook TanStack Query per tutte le API CRUD + tipi creazione e dashboard
+
+Nuovi hook: use-cantieri, use-clienti, use-fornitori, use-timeline,
+use-media, use-squadre, use-fatture, use-preventivi, use-ordini,
+use-rilievi, use-progetti, use-dashboard, use-utenti.
+
+Nuovi tipi: dashboard.ts, interfacce di creazione/aggiornamento.

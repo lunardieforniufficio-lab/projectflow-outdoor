@@ -60,3 +60,64 @@ export interface Fornitore {
     attivo: boolean;
     creatoIl: string;
 }
+
+/** Payload creazione cliente (POST /clienti) */
+export interface ClienteCreazione {
+    nome: string;
+    cognome: string;
+    codiceFiscale: string;
+    telefono: string;
+    email?: string;
+    indirizzo?: string;
+    citta?: string;
+    cap?: string;
+    provincia?: string;
+    iban?: string;
+    note?: string;
+}
+
+/** Payload creazione fornitore (POST /fornitori) */
+export interface FornitoreCreazione {
+    nome: string;
+    partitaIva?: string;
+    email?: string;
+    telefono?: string;
+    indirizzo?: string;
+    referente?: string;
+    note?: string;
+}
+
+/** Payload creazione squadra (POST /squadre) */
+export interface SquadraCreazione {
+    nome: string;
+    responsabileId?: string;
+    telefono?: string;
+    colore?: string;
+}
+
+/** Payload creazione utente gestionale (POST /utenti) */
+export interface UtenteCreazione {
+    clerkUserId: string;
+    nome: string;
+    cognome: string;
+    emailAziendale?: string;
+    whatsapp?: string;
+    ruoloId: string;
+    areaId?: string;
+}
+
+/** Filtri per la lista clienti */
+export interface FiltriClienti {
+    ricerca?: string;
+    pagina?: number;
+    limite?: number;
+}
+
+/** Filtri per la lista fornitori */
+export interface FiltriFornitori {
+    ricerca?: string;
+    attivo?: boolean;
+    pagina?: number;
+    limite?: number;
+}
+

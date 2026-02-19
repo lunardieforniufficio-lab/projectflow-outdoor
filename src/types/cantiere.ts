@@ -190,3 +190,102 @@ export interface FiltriCantiere {
     limite?: number;
     ordine?: string;
 }
+
+/** Payload creazione cantiere (POST /cantieri) */
+export interface CantiereCreazione {
+    clienteId: string;
+    tipoProdottoId: string;
+    indirizzoCantiere: string;
+    cittaCantiere?: string;
+    importoTotale?: number;
+    venditoreId?: string;
+    dataInizio?: string;
+    dataFinePrevista?: string;
+    noteInterne?: string;
+}
+
+/** Payload aggiornamento cantiere (PATCH /cantieri/:id) */
+export interface CantiereAggiornamento {
+    tipoProdottoId?: string;
+    importoTotale?: number;
+    importoAcconto?: number;
+    indirizzoCantiere?: string;
+    cittaCantiere?: string;
+    squadraId?: string;
+    venditoreId?: string;
+    progettistaId?: string;
+    dataInizio?: string;
+    dataFinePrevista?: string;
+    noteInterne?: string;
+}
+
+/** Payload transizione stato (POST /cantieri/:id/stato) */
+export interface TransizioneStatoPayload {
+    nuovoStatoId: string;
+}
+
+/** Risposta vincoli stato (GET /cantieri/:id/vincoli) */
+export interface VincoloStatoRisposta {
+    vincoloDescrizione: string;
+    soddisfatto: boolean;
+}
+
+/** Payload creazione timeline (POST /cantieri/:id/timeline) */
+export interface TimelineCreazione {
+    tipo: string;
+    contenuto: string;
+    mediaIds?: string[];
+}
+
+/** Payload upload media (POST /cantieri/:id/media) */
+export interface MediaUploadPayload {
+    file: File;
+    tipo: "foto" | "video" | "documento" | "progetto";
+}
+
+/** Payload creazione rilievo (POST /cantieri/:id/rilievo) */
+export interface RilievoCreazione {
+    larghezzaCm?: number;
+    profonditaCm?: number;
+    altezzaMaxCm?: number;
+    noteTecniche?: string;
+    ostacoli?: Record<string, unknown>;
+}
+
+/** Payload creazione progetto (POST /cantieri/:id/progetti) */
+export interface ProgettoCreazione {
+    fornitore?: string;
+    descrizione?: string;
+    larghezzaCm?: number;
+    profonditaCm?: number;
+    altezzaMaxCm?: number;
+    googleDriveFileId: string;
+}
+
+/** Payload creazione preventivo (POST /cantieri/:id/preventivi) */
+export interface PreventivoCreazione {
+    numero: string;
+    descrizione?: string;
+    importo: number;
+}
+
+/** Payload creazione fattura (POST /cantieri/:id/fatture) */
+export interface FatturaCreazione {
+    numero: string;
+    tipo: string;
+    importo: number;
+    dataEmissione: string;
+    note?: string;
+}
+
+/** Payload creazione ordine (POST /cantieri/:id/ordini) */
+export interface OrdineCreazione {
+    fornitoreId: string;
+    numeroOrdine?: string;
+    descrizione: string;
+    importo?: number;
+    dataOrdine: string;
+    dataConsegnaPrevista?: string;
+    note?: string;
+}
+

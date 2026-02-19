@@ -16,13 +16,24 @@ export type {
 export type {
     Cantiere,
     CantiereDettaglio,
+    CantiereCreazione,
+    CantiereAggiornamento,
+    TransizioneStatoPayload,
+    VincoloStatoRisposta,
     TimelineEntry,
+    TimelineCreazione,
     MediaFile,
+    MediaUploadPayload,
     Rilievo,
+    RilievoCreazione,
     Progetto,
+    ProgettoCreazione,
     Preventivo,
+    PreventivoCreazione,
     Fattura,
+    FatturaCreazione,
     OrdineFornitore,
+    OrdineCreazione,
     Squadra,
     MembroSquadra,
     FiltriCantiere,
@@ -31,8 +42,14 @@ export type {
 export type {
     UtenteGestionale,
     UtenteDettaglio,
+    UtenteCreazione,
     Cliente,
+    ClienteCreazione,
+    FiltriClienti,
     Fornitore,
+    FornitoreCreazione,
+    FiltriFornitori,
+    SquadraCreazione,
 } from "./utente";
 
 export type {
@@ -58,3 +75,9 @@ export type {
     ApiErrore,
     OpzioniRichiesta,
 } from "./api";
+
+export type {
+    DashboardStats,
+    CantieriPerStato,
+    Alert,
+} from "./dashboard";
