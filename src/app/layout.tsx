@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { itIT } from "@clerk/localizations";
 import { Outfit } from "next/font/google";
 import { ProviderQuery } from "@/lib/provider-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -48,11 +50,22 @@ export default function RootLayout({
       <html lang="it" className="dark">
         <body className={`${outfit.variable} antialiased`}>
           <ProviderQuery>
-            {children}
+            <TooltipProvider>
+              {children}
+              <Toaster
+                position="bottom-right"
+                toastOptions={{
+                  style: {
+                    background: "#1a1a1a",
+                    border: "1px solid #2a2a2a",
+                    color: "#e8e8e8",
+                  },
+                }}
+              />
+            </TooltipProvider>
           </ProviderQuery>
         </body>
       </html>
     </ClerkProvider>
   );
 }
-
