@@ -7,9 +7,9 @@
 ## Stato Attuale
 
 ```
-BLOCCO CORRENTE: 0 — Setup Infrastruttura
-ULTIMA MILESTONE: nessuna
-ULTIMO COMMIT: 8649a8b
+BLOCCO CORRENTE: 0 — Setup Infrastruttura ✅ COMPLETATO
+ULTIMA MILESTONE: v0.0.1
+ULTIMO COMMIT: fce03b0
 ```
 
 ---
@@ -26,8 +26,8 @@ ULTIMO COMMIT: 8649a8b
 | 0.5 | Crea `globals.css` con variabili `--pf-*` | ✅ | `20c7299` |
 | 0.6 | Crea struttura cartelle completa (vuota) | ✅ | `20c7299` |
 | 0.7 | File `.env.local` con placeholder | ✅ | `20c7299` |
-| 0.8 | Setup PostgreSQL: crea tabelle config (ruoli, stati, transizioni, vincoli, tipi, aree) | ⬜ | |
-| 0.9 | Esegui SEED_DATA.md (dati iniziali) | ⬜ | |
+| 0.8 | Setup PostgreSQL: crea tabelle config (ruoli, stati, transizioni, vincoli, tipi, aree) | ✅ | `fce03b0` |
+| 0.9 | Esegui SEED_DATA.md (dati iniziali) | ✅ | `fce03b0` |
 | 0.10 | Init git + primo commit + tag v0.0.1 | ✅ | `20c7299` |
 
 **Criterio completamento**: progetto parte con `npm run dev`, Clerk login funziona, DB ha tabelle config populate.
