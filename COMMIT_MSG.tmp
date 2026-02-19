@@ -1,1 +1,1 @@
-feat(forms): campi form validati (CF, telefono, IBAN, email, valuta, data, select, upload) + demo page aggiornata
+style(ui): fix skeleton color (neutral) and badge padding

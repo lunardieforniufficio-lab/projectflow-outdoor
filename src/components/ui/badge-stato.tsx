@@ -28,8 +28,8 @@ export function BadgeStato({
         <span
             className={cn(
                 "inline-flex items-center rounded-full font-medium tracking-wide uppercase",
-                dimensione === "sm" && "px-2 py-0.5 text-[10px]",
-                dimensione === "md" && "px-3 py-1 text-xs",
+                dimensione === "sm" && "px-2 py-1 text-[10px]",
+                dimensione === "md" && "px-3 py-1.5 text-xs",
                 conGlow && "shadow-lg",
                 className
             )}
