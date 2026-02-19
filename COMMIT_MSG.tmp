@@ -1,7 +1,7 @@
-feat(hooks): 13 hook TanStack Query per tutte le API CRUD + tipi creazione e dashboard
+feat(ui): layout principale con sidebar, dashboard stats e pagina cantieri
 
-Nuovi hook: use-cantieri, use-clienti, use-fornitori, use-timeline,
-use-media, use-squadre, use-fatture, use-preventivi, use-ordini,
-use-rilievi, use-progetti, use-dashboard, use-utenti.
-
-Nuovi tipi: dashboard.ts, interfacce di creazione/aggiornamento.
+- Sidebar collassabile desktop + sheet mobile
+- Dashboard con 4 stat cards, grafico barre per stato, alert panel, cantieri recenti
+- Pagina cantieri con ricerca, filtri stato, tabella responsive, ExportToolbar
+- Dati mock per sviluppo UI
+- StatCard riusabile con icona, trend e glow effect
