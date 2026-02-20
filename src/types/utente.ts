@@ -104,6 +104,7 @@ export interface UtenteCreazione {
     whatsapp?: string;
     ruoloId: string;
     areaId?: string;
+    attivo?: boolean;
 }
 
 /** Filtri per la lista clienti */

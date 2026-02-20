@@ -25,13 +25,16 @@ import {
     SelectPf,
 } from "@/components/ui/pannello-crud";
 import { ExportToolbar } from "@/components/ui/export-toolbar";
+import { DialogConferma } from "@/components/ui/dialog-conferma";
 import {
     cantieriDemo,
     statiCantiereDemo,
     clientiDemo,
     tipiProdottoDemo,
     squadreDemo,
+    utentiDemo,
 } from "@/lib/dati-mock";
+import { useCantieri, useCreaCantiere, useAggiornaCantiere, useEliminaCantiere } from "@/hooks/use-cantieri";
 import type { Cantiere } from "@/types/cantiere";
 
 // === Tipi form ===
@@ -94,17 +97,24 @@ const formVuoto: FormCantiere = {
     noteInterne: "",
 };
 
-// Venditori mock (utenti con ruolo venditore)
-const venditoriDemo = [
-    { id: "u2", nome: "Francesco", cognome: "Sinagra" },
-    { id: "u5", nome: "Marco", cognome: "Bianchi" },
-];
+// Venditori ricavati dall'organigramma reale (ruolo venditore attivi)
+const venditoriDemo = utentiDemo.filter((u) => u.ruolo.codice === "venditore" && u.attivo);
 
 export default function PaginaCantieri() {
     const router = useRouter();
 
-    // --- Dati locali (mock) ---
-    const [cantieri, setCantieri] = useState<Cantiere[]>(cantieriDemo);
+    // --- Hook dati reali n8n (fallback a mock se API non disponibile) ---
+    const { cantieri: cantieriApi } = useCantieri();
+    const creaCantiere = useCreaCantiere();
+    const aggiornaCantiere = useAggiornaCantiere();
+    const eliminaCantiere = useEliminaCantiere();
+
+    // Dati: usa API se disponibili, altrimenti mock
+    const cantieri = cantieriApi.length > 0 ? cantieriApi : cantieriDemo;
+
+    // --- Dialog eliminazione ---
+    const [cantierePerElimina, setCantierePerElimina] = useState<Cantiere | null>(null);
+    const isEliminazione = eliminaCantiere.isPending;
 
     // --- Pannello CRUD ---
     const [pannelloAperto, setPannelloAperto] = useState(false);
@@ -112,7 +122,7 @@ export default function PaginaCantieri() {
     const [cantiereCorrente, setCantiereCorrente] = useState<Cantiere | null>(null);
     const [form, setForm] = useState<FormCantiere>(formVuoto);
     const [errori, setErrori] = useState<ErroriForm>({});
-    const [isSalvataggio, setIsSalvataggio] = useState(false);
+    const isSalvataggio = creaCantiere.isPending || aggiornaCantiere.isPending;
 
     // --- Helpers stato/cliente/tipo ---
     const getNomeCliente = (id: string) => {
@@ -156,12 +166,23 @@ export default function PaginaCantieri() {
         setPannelloAperto(true);
     }, []);
 
-    // === Elimina cantiere ===
-    const eliminaCantiere = useCallback((id: string, e: React.MouseEvent) => {
+    // === Avvia eliminazione cantiere ===
+    const avviaElimina = useCallback((id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!confirm("Vuoi eliminare questo cantiere?")) return;
-        setCantieri((prev) => prev.filter((c) => c.id !== id));
-    }, []);
+        const cantiere = cantieri.find((c) => c.id === id) ?? null;
+        setCantierePerElimina(cantiere);
+    }, [cantieri]);
+
+    // === Conferma eliminazione cantiere ===
+    const confermaElimina = useCallback(async () => {
+        if (!cantierePerElimina) return;
+        try {
+            await eliminaCantiere.mutateAsync(cantierePerElimina.id);
+            setCantierePerElimina(null);
+        } catch {
+            // errore gestito da TanStack Query
+        }
+    }, [cantierePerElimina, eliminaCantiere]);
 
     // === Validazione form ===
     const valida = (): boolean => {
@@ -178,78 +199,49 @@ export default function PaginaCantieri() {
     // === Salva cantiere ===
     const salva = async () => {
         if (!valida()) return;
-        setIsSalvataggio(true);
-
-        // TODO: sostituire con chiamata API n8n
-        await new Promise((r) => setTimeout(r, 700));
-
-        const ora = new Date().toISOString();
-
-        if (modalitaModifica && cantiereCorrente) {
-            // Aggiorna
-            setCantieri((prev) =>
-                prev.map((c) =>
-                    c.id === cantiereCorrente.id
-                        ? {
-                            ...c,
-                            clienteId: form.clienteId,
-                            tipoProdottoId: form.tipoProdottoId,
-                            statoId: form.statoId,
-                            indirizzoCantiere: form.indirizzoCantiere,
-                            cittaCantiere: form.cittaCantiere || null,
-                            importoTotale: form.importoTotale ? Number(form.importoTotale) : null,
-                            importoAcconto: form.importoAcconto ? Number(form.importoAcconto) : null,
-                            accontoPagato: form.accontoPagato,
-                            squadraId: form.squadraId || null,
-                            venditoreId: form.venditoreId || null,
-                            dataInizio: form.dataInizio || null,
-                            dataFinePrevista: form.dataFinePrevista || null,
-                            noteInterne: form.noteInterne || null,
-                            aggiornatoIl: ora,
-                        }
-                        : c
-                )
-            );
-        } else {
-            // Crea nuovo
-            const maxNum = cantieri.length > 0
-                ? Math.max(...cantieri.map((c) => {
-                    const match = c.codice.match(/C-\d{4}-(\d+)/);
-                    return match ? parseInt(match[1]) : 0;
-                }))
-                : 0;
-            const anno = new Date().getFullYear();
-            const nuovoCodice = `C-${anno}-${String(maxNum + 1).padStart(3, "0")}`;
-
-            const nuovo: Cantiere = {
-                id: `k${Date.now()}`,
-                codice: nuovoCodice,
-                clienteId: form.clienteId,
-                tipoProdottoId: form.tipoProdottoId,
-                statoId: form.statoId,
-                indirizzoCantiere: form.indirizzoCantiere,
-                cittaCantiere: form.cittaCantiere || null,
-                importoTotale: form.importoTotale ? Number(form.importoTotale) : null,
-                importoAcconto: form.importoAcconto ? Number(form.importoAcconto) : null,
-                accontoPagato: form.accontoPagato,
-                squadraId: form.squadraId || null,
-                venditoreId: form.venditoreId || null,
-                progettistaId: null,
-                dataInizio: form.dataInizio || null,
-                dataFinePrevista: form.dataFinePrevista || null,
-                dataFineReale: null,
-                noteInterne: form.noteInterne || null,
-                googleCalendarEventId: null,
-                googleDriveFolderId: null,
-                creatoIl: ora,
-                aggiornatoIl: ora,
-                creatoDa: null,
-            };
-            setCantieri((prev) => [nuovo, ...prev]);
+        try {
+            if (modalitaModifica && cantiereCorrente) {
+                // Aggiorna
+                await aggiornaCantiere.mutateAsync({
+                    id: cantiereCorrente.id,
+                    dati: {
+                        clienteId: form.clienteId,
+                        tipoProdottoId: form.tipoProdottoId,
+                        statoId: form.statoId,
+                        indirizzoCantiere: form.indirizzoCantiere,
+                        cittaCantiere: form.cittaCantiere || undefined,
+                        importoTotale: form.importoTotale ? Number(form.importoTotale) : undefined,
+                        importoAcconto: form.importoAcconto ? Number(form.importoAcconto) : undefined,
+                        accontoPagato: form.accontoPagato,
+                        squadraId: form.squadraId || undefined,
+                        venditoreId: form.venditoreId || undefined,
+                        dataInizio: form.dataInizio || undefined,
+                        dataFinePrevista: form.dataFinePrevista || undefined,
+                        noteInterne: form.noteInterne || undefined,
+                    },
+                });
+            } else {
+                // Crea nuovo
+                await creaCantiere.mutateAsync({
+                    clienteId: form.clienteId,
+                    tipoProdottoId: form.tipoProdottoId,
+                    statoId: form.statoId,
+                    indirizzoCantiere: form.indirizzoCantiere,
+                    cittaCantiere: form.cittaCantiere || undefined,
+                    importoTotale: form.importoTotale ? Number(form.importoTotale) : undefined,
+                    importoAcconto: form.importoAcconto ? Number(form.importoAcconto) : undefined,
+                    accontoPagato: form.accontoPagato,
+                    squadraId: form.squadraId || undefined,
+                    venditoreId: form.venditoreId || undefined,
+                    dataInizio: form.dataInizio || undefined,
+                    dataFinePrevista: form.dataFinePrevista || undefined,
+                    noteInterne: form.noteInterne || undefined,
+                });
+            }
+            setPannelloAperto(false);
+        } catch {
+            // errore gestito da TanStack Query
         }
-
-        setIsSalvataggio(false);
-        setPannelloAperto(false);
     };
 
     // === Colonne DataTable ===
@@ -374,7 +366,7 @@ export default function PaginaCantieri() {
                         <Pencil size={15} />
                     </button>
                     <button
-                        onClick={(e) => eliminaCantiere(row.original.id, e)}
+                        onClick={(e) => avviaElimina(row.original.id, e)}
                         title="Elimina"
                         className="p-1.5 rounded-md hover:bg-red-500/10 transition-colors"
                         style={{ color: "#ef4444" }}
@@ -515,6 +507,22 @@ export default function PaginaCantieri() {
                         </p>
                     </div>
                 }
+            />
+
+            {/* === DIALOG CONFERMA ELIMINAZIONE === */}
+            <DialogConferma
+                aperto={!!cantierePerElimina}
+                onChiudi={() => setCantierePerElimina(null)}
+                onConferma={confermaElimina}
+                titolo="Elimina cantiere"
+                messaggio={
+                    cantierePerElimina
+                        ? `Vuoi eliminare il cantiere ${cantierePerElimina.codice}? Questa azione non può essere annullata.`
+                        : ""
+                }
+                labelConferma="Elimina"
+                tipo="pericolo"
+                isCaricamento={isEliminazione}
             />
 
             {/* === PANNELLO CRUD === */}

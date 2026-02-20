@@ -22,6 +22,8 @@ import {
     InputPf,
 } from "@/components/ui/pannello-crud";
 import { squadreDemo, utentiDemo } from "@/lib/dati-mock";
+import { useSquadre, useCreaSquadra, useAggiornaSquadra, useEliminaSquadra, useAggiuntaMembro, useRimozioneMembro } from "@/hooks/use-squadre";
+import { DialogConferma } from "@/components/ui/dialog-conferma";
 import type { Squadra } from "@/types/cantiere";
 import type { UtenteDettaglio } from "@/types";
 
@@ -91,9 +93,21 @@ const formVuoto: FormSquadra = {
 };
 
 export default function PaginaSquadre() {
-    // --- Dati locali (mock) ---
-    const [squadre, setSquadre] = useState<Squadra[]>(squadreDemo);
+    // --- Hook dati reali n8n (fallback a mock se API non disponibile) ---
+    const { squadre: squadreApi } = useSquadre();
+    const creaSquadra = useCreaSquadra();
+    const aggiornaSquadra = useAggiornaSquadra();
+    const eliminaSquadra = useEliminaSquadra();
+    const aggiuntaMembro = useAggiuntaMembro();
+    const rimozioneMembro = useRimozioneMembro();
+
+    // Dati: usa API se disponibili, altrimenti mock
+    const squadre = squadreApi.length > 0 ? squadreApi : squadreDemo;
     const [membri, setMembri] = useState<MembroAssegnato[]>(membriInitiali);
+
+    // Dialog conferma eliminazione
+    const [squadraPerElimina, setSquadraPerElimina] = useState<Squadra | null>(null);
+    const isEliminazione = eliminaSquadra.isPending;
 
     // --- Pannello CRUD ---
     const [pannelloAperto, setPannelloAperto] = useState(false);
@@ -101,7 +115,7 @@ export default function PaginaSquadre() {
     const [squadraCorrente, setSquadraCorrente] = useState<Squadra | null>(null);
     const [form, setForm] = useState<FormSquadra>(formVuoto);
     const [errori, setErrori] = useState<ErroriForm>({});
-    const [isSalvataggio, setIsSalvataggio] = useState(false);
+    const isSalvataggio = creaSquadra.isPending || aggiornaSquadra.isPending;
 
     // --- Ricerca membri nel pannello ---
     const [ricercaMembri, setRicercaMembri] = useState("");
@@ -149,13 +163,24 @@ export default function PaginaSquadre() {
         [membri]
     );
 
-    // === Elimina squadra ===
-    const eliminaSquadra = useCallback((id: string, e: React.MouseEvent) => {
+    // === Avvia eliminazione squadra ===
+    const avviaElimina = useCallback((id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!confirm("Vuoi eliminare questa squadra?")) return;
-        setSquadre((prev) => prev.filter((s) => s.id !== id));
-        setMembri((prev) => prev.filter((m) => m.squadraId !== id));
-    }, []);
+        const squadra = squadre.find((s) => s.id === id) ?? null;
+        setSquadraPerElimina(squadra);
+    }, [squadre]);
+
+    // === Conferma eliminazione squadra ===
+    const confermaEliminaSquadra = useCallback(async () => {
+        if (!squadraPerElimina) return;
+        try {
+            await eliminaSquadra.mutateAsync(squadraPerElimina.id);
+            setMembri((prev) => prev.filter((m) => m.squadraId !== squadraPerElimina.id));
+            setSquadraPerElimina(null);
+        } catch {
+            // errore gestito da TanStack Query
+        }
+    }, [squadraPerElimina, eliminaSquadra]);
 
     // === Toggle membro nel form ===
     const toggleMembro = useCallback((utenteId: string) => {
@@ -178,77 +203,103 @@ export default function PaginaSquadre() {
     // === Salva squadra ===
     const salva = async () => {
         if (!valida()) return;
-        setIsSalvataggio(true);
-
-        // TODO: chiamata API n8n
-        await new Promise((r) => setTimeout(r, 600));
-
-        const ora = new Date().toISOString();
-
-        if (modalitaModifica && squadraCorrente) {
-            setSquadre((prev) =>
-                prev.map((s) =>
-                    s.id === squadraCorrente.id
-                        ? {
-                            ...s,
-                            nome: form.nome.trim(),
-                            telefono: form.telefono.trim() || null,
-                            colore: form.colore,
-                            attiva: form.attiva,
-                        }
-                        : s
-                )
-            );
-            // Aggiorna membri
-            setMembri((prev) => {
-                const senzaSquadra = prev.filter((m) => m.squadraId !== squadraCorrente.id);
-                const nuoviMembri: MembroAssegnato[] = form.membroIds.map((uid) => {
-                    const utente = utentiDemo.find((u) => u.id === uid);
-                    return {
-                        utenteId: uid,
-                        squadraId: squadraCorrente.id,
-                        ruoloSquadra: (
-                            utente?.ruolo.codice === "caposquadra"
-                                ? "caposquadra"
-                                : utente?.ruolo.codice === "installatore"
-                                    ? "installatore"
-                                    : "altro"
-                        ) as "caposquadra" | "installatore" | "altro",
-                    };
+        try {
+            if (modalitaModifica && squadraCorrente) {
+                await aggiornaSquadra.mutateAsync({
+                    id: squadraCorrente.id,
+                    dati: {
+                        nome: form.nome.trim(),
+                        telefono: form.telefono.trim() || undefined,
+                        colore: form.colore,
+                    },
                 });
-                return [...senzaSquadra, ...nuoviMembri];
-            });
-        } else {
-            const nuovaId = `sq${Date.now()}`;
-            const nuova: Squadra = {
-                id: nuovaId,
-                nome: form.nome.trim(),
-                responsabileId: null,
-                telefono: form.telefono.trim() || null,
-                colore: form.colore,
-                attiva: form.attiva,
-                creatoIl: ora,
-            };
-            setSquadre((prev) => [nuova, ...prev]);
-            // Aggiungi membri
-            const nuoviMembri: MembroAssegnato[] = form.membroIds.map((uid) => {
-                const utente = utentiDemo.find((u) => u.id === uid);
-                return {
-                    utenteId: uid,
-                    squadraId: nuovaId,
-                    ruoloSquadra:
-                        utente?.ruolo.codice === "caposquadra"
+                // Sincronizza membri: rimuovi vecchi, aggiungi nuovi
+                const vecchiIds = membri
+                    .filter((m) => m.squadraId === squadraCorrente.id)
+                    .map((m) => m.utenteId);
+                const daRimuovere = vecchiIds.filter((id) => !form.membroIds.includes(id));
+                const daAggiungere = form.membroIds.filter((id) => !vecchiIds.includes(id));
+                await Promise.all([
+                    ...daRimuovere.map((uid) =>
+                        rimozioneMembro.mutateAsync({ squadraId: squadraCorrente.id, membroId: uid })
+                    ),
+                    ...daAggiungere.map((uid) => {
+                        const utente = utentiDemo.find((u) => u.id === uid);
+                        const ruolo = utente?.ruolo.codice === "caposquadra"
                             ? "caposquadra"
                             : utente?.ruolo.codice === "installatore"
                                 ? "installatore"
-                                : "altro",
-                };
-            });
-            setMembri((prev) => [...prev, ...nuoviMembri]);
+                                : "altro";
+                        return aggiuntaMembro.mutateAsync({
+                            squadraId: squadraCorrente.id,
+                            utenteId: uid,
+                            ruolo,
+                        });
+                    }),
+                ]);
+                // Aggiorna stato locale membri
+                setMembri((prev) => {
+                    const senzaSquadra = prev.filter((m) => m.squadraId !== squadraCorrente.id);
+                    const nuoviMembri: MembroAssegnato[] = form.membroIds.map((uid) => {
+                        const utente = utentiDemo.find((u) => u.id === uid);
+                        return {
+                            utenteId: uid,
+                            squadraId: squadraCorrente.id,
+                            ruoloSquadra: (
+                                utente?.ruolo.codice === "caposquadra"
+                                    ? "caposquadra"
+                                    : utente?.ruolo.codice === "installatore"
+                                        ? "installatore"
+                                        : "altro"
+                            ) as "caposquadra" | "installatore" | "altro",
+                        };
+                    });
+                    return [...senzaSquadra, ...nuoviMembri];
+                });
+            } else {
+                const nuovaSquadra = await creaSquadra.mutateAsync({
+                    nome: form.nome.trim(),
+                    telefono: form.telefono.trim() || undefined,
+                    colore: form.colore,
+                });
+                // Aggiungi membri alla nuova squadra
+                if (nuovaSquadra && form.membroIds.length > 0) {
+                    await Promise.all(
+                        form.membroIds.map((uid) => {
+                            const utente = utentiDemo.find((u) => u.id === uid);
+                            const ruolo = utente?.ruolo.codice === "caposquadra"
+                                ? "caposquadra"
+                                : utente?.ruolo.codice === "installatore"
+                                    ? "installatore"
+                                    : "altro";
+                            return aggiuntaMembro.mutateAsync({
+                                squadraId: nuovaSquadra.id,
+                                utenteId: uid,
+                                ruolo,
+                            });
+                        })
+                    );
+                    // Aggiorna stato locale
+                    const nuoviMembri: MembroAssegnato[] = form.membroIds.map((uid) => {
+                        const utente = utentiDemo.find((u) => u.id === uid);
+                        return {
+                            utenteId: uid,
+                            squadraId: nuovaSquadra.id,
+                            ruoloSquadra:
+                                utente?.ruolo.codice === "caposquadra"
+                                    ? "caposquadra"
+                                    : utente?.ruolo.codice === "installatore"
+                                        ? "installatore"
+                                        : "altro",
+                        } as MembroAssegnato;
+                    });
+                    setMembri((prev) => [...prev, ...nuoviMembri]);
+                }
+            }
+            setPannelloAperto(false);
+        } catch {
+            // errore gestito da TanStack Query
         }
-
-        setIsSalvataggio(false);
-        setPannelloAperto(false);
     };
 
     // === Utenti filtrati per ricerca nel pannello ===
@@ -384,7 +435,7 @@ export default function PaginaSquadre() {
                         <Pencil size={15} />
                     </button>
                     <button
-                        onClick={(e) => eliminaSquadra(row.original.id, e)}
+                        onClick={(e) => avviaElimina(row.original.id, e)}
                         title="Elimina"
                         className="p-1.5 rounded-md hover:bg-red-500/10 transition-colors"
                         style={{ color: "#ef4444" }}
@@ -479,6 +530,22 @@ export default function PaginaSquadre() {
                         </p>
                     </div>
                 }
+            />
+
+            {/* === DIALOG CONFERMA ELIMINAZIONE === */}
+            <DialogConferma
+                aperto={!!squadraPerElimina}
+                onChiudi={() => setSquadraPerElimina(null)}
+                onConferma={confermaEliminaSquadra}
+                titolo="Elimina squadra"
+                messaggio={
+                    squadraPerElimina
+                        ? `Vuoi eliminare la squadra "${squadraPerElimina.nome}"? Questa azione non può essere annullata.`
+                        : ""
+                }
+                labelConferma="Elimina"
+                tipo="pericolo"
+                isCaricamento={isEliminazione}
             />
 
             {/* === PANNELLO CRUD === */}

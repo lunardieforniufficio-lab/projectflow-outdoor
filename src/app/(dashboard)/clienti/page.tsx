@@ -5,7 +5,6 @@ import { useState, useCallback } from "react";
 import { Users, Plus, Pencil, Trash2, Phone, Mail } from "lucide-react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { ExportToolbar } from "@/components/ui/export-toolbar";
-import { BadgeStato } from "@/components/ui/badge-stato";
 import {
     PannelloCrud,
     SezioneForm,
@@ -14,135 +13,17 @@ import {
     InputPf,
     TextareaPf,
 } from "@/components/ui/pannello-crud";
+import { DialogConferma } from "@/components/ui/dialog-conferma";
 import { clientiDemo } from "@/lib/dati-mock";
+import {
+    useClienti,
+    useCreaCliente,
+    useAggiornaCliente,
+    useEliminaCliente,
+} from "@/hooks/use-clienti";
 import type { Cliente } from "@/types";
 
-// === COLONNE TABELLA ===
-
-const colonne: ColumnDef<Cliente, unknown>[] = [
-    {
-        id: "nome",
-        accessorFn: (row) => `${row.cognome} ${row.nome}`,
-        header: "Nome",
-        cell: ({ row }) => (
-            <div className="flex items-center gap-3">
-                <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                    style={{
-                        backgroundColor: "var(--pf-accent-primary-subtle)",
-                        color: "var(--pf-accent-primary)",
-                    }}
-                >
-                    {row.original.nome[0]}{row.original.cognome[0]}
-                </div>
-                <div className="min-w-0">
-                    <p className="font-medium truncate" style={{ color: "var(--pf-text-primary)" }}>
-                        {row.original.cognome} {row.original.nome}
-                    </p>
-                    {row.original.citta && (
-                        <p className="text-xs truncate" style={{ color: "var(--pf-text-muted)" }}>
-                            {row.original.citta}{row.original.provincia ? ` (${row.original.provincia})` : ""}
-                        </p>
-                    )}
-                </div>
-            </div>
-        ),
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-        cell: ({ getValue }) => {
-            const v = getValue() as string | null;
-            return v ? (
-                <span className="flex items-center gap-1.5 text-xs" style={{ color: "var(--pf-text-secondary)" }}>
-                    <Mail size={12} className="flex-shrink-0" style={{ color: "var(--pf-text-muted)" }} />
-                    <span className="truncate">{v}</span>
-                </span>
-            ) : (
-                <span className="text-xs" style={{ color: "var(--pf-text-muted)" }}>—</span>
-            );
-        },
-        meta: { nascostaMobile: true },
-    },
-    {
-        accessorKey: "telefono",
-        header: "Telefono",
-        cell: ({ getValue }) => {
-            const v = getValue() as string;
-            return (
-                <span className="flex items-center gap-1.5 font-mono text-xs" style={{ color: "var(--pf-text-secondary)" }}>
-                    <Phone size={12} className="flex-shrink-0" style={{ color: "var(--pf-text-muted)" }} />
-                    {v}
-                </span>
-            );
-        },
-    },
-    {
-        accessorKey: "codiceFiscale",
-        header: "CF",
-        cell: ({ getValue }) => {
-            const v = getValue() as string;
-            return (
-                <span
-                    className="font-mono text-[11px] px-1.5 py-0.5 rounded"
-                    style={{ backgroundColor: "var(--pf-bg-hover)", color: "var(--pf-text-muted)" }}
-                >
-                    {v}
-                </span>
-            );
-        },
-        meta: { nascostaMobile: true },
-    },
-    {
-        accessorKey: "citta",
-        header: "Città",
-        cell: ({ getValue }) => (
-            <span className="text-xs" style={{ color: "var(--pf-text-secondary)" }}>
-                {(getValue() as string | null) ?? "—"}
-            </span>
-        ),
-        meta: { nascostaMobile: true },
-    },
-    {
-        id: "azioni",
-        header: "",
-        enableSorting: false,
-        cell: ({ row, table }) => {
-            const meta = table.options.meta as TableMeta | undefined;
-            return (
-                <div className="flex items-center gap-1 justify-end">
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            meta?.onModifica(row.original);
-                        }}
-                        className="p-1.5 rounded-lg hover:bg-[var(--pf-bg-hover)] transition-colors"
-                        style={{ color: "var(--pf-text-muted)" }}
-                        title="Modifica"
-                    >
-                        <Pencil size={14} />
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            meta?.onElimina(row.original);
-                        }}
-                        className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
-                        style={{ color: "var(--pf-text-muted)" }}
-                        title="Elimina"
-                    >
-                        <Trash2 size={14} />
-                    </button>
-                </div>
-            );
-        },
-    },
-];
-
-interface TableMeta {
-    onModifica: (cliente: Cliente) => void;
-    onElimina: (cliente: Cliente) => void;
-}
+// (le colonne vengono definite dentro il componente per accedere ai callbacks via closure)
 
 // === COLONNE EXPORT ===
 
@@ -207,20 +88,148 @@ function clienteToForm(c: Cliente): StatoForm {
 // === PAGINA ===
 
 export default function PaginaClienti() {
+    // --- Hook dati reali n8n (fallback a mock se API non disponibile) ---
+    const { clienti: clientiApi } = useClienti();
+    const creaCliente = useCreaCliente();
+    const aggiornaCliente = useAggiornaCliente();
+    const eliminaCliente = useEliminaCliente();
+
+    // Dati: usa API se disponibili, altrimenti mock
+    const clienti = clientiApi.length > 0 ? clientiApi : clientiDemo;
+
     // Stato pannello CRUD
     const [pannelloAperto, setPannelloAperto] = useState(false);
     const [clienteInModifica, setClienteInModifica] = useState<Cliente | null>(null);
     const [form, setForm] = useState<StatoForm>(formVuoto);
     const [errori, setErrori] = useState<Partial<Record<keyof StatoForm, string>>>({});
-    const [isSalvataggio, setIsSalvataggio] = useState(false);
 
-    // TODO: sostituire con hook reali quando API pronte
-    const dati = clientiDemo;
+    // Stato dialog eliminazione
+    const [clientePerElimina, setClientePerElimina] = useState<Cliente | null>(null);
+
+    const isSalvataggio = creaCliente.isPending || aggiornaCliente.isPending;
+    const isEliminazione = eliminaCliente.isPending;
+
+    // Colonne (definite dentro il componente per accesso ai callbacks via closure)
+    const colonne: ColumnDef<Cliente, unknown>[] = [
+        {
+            id: "nome",
+            accessorFn: (row) => `${row.cognome} ${row.nome}`,
+            header: "Nome",
+            cell: ({ row }) => (
+                <div className="flex items-center gap-3">
+                    <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                        style={{
+                            backgroundColor: "var(--pf-accent-primary-subtle)",
+                            color: "var(--pf-accent-primary)",
+                        }}
+                    >
+                        {row.original.nome[0]}{row.original.cognome[0]}
+                    </div>
+                    <div className="min-w-0">
+                        <p className="font-medium truncate" style={{ color: "var(--pf-text-primary)" }}>
+                            {row.original.cognome} {row.original.nome}
+                        </p>
+                        {row.original.citta && (
+                            <p className="text-xs truncate" style={{ color: "var(--pf-text-muted)" }}>
+                                {row.original.citta}{row.original.provincia ? ` (${row.original.provincia})` : ""}
+                            </p>
+                        )}
+                    </div>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "email",
+            header: "Email",
+            cell: ({ getValue }) => {
+                const v = getValue() as string | null;
+                return v ? (
+                    <span className="flex items-center gap-1.5 text-xs" style={{ color: "var(--pf-text-secondary)" }}>
+                        <Mail size={12} className="flex-shrink-0" style={{ color: "var(--pf-text-muted)" }} />
+                        <span className="truncate">{v}</span>
+                    </span>
+                ) : (
+                    <span className="text-xs" style={{ color: "var(--pf-text-muted)" }}>—</span>
+                );
+            },
+            meta: { nascostaMobile: true },
+        },
+        {
+            accessorKey: "telefono",
+            header: "Telefono",
+            cell: ({ getValue }) => {
+                const v = getValue() as string;
+                return (
+                    <span className="flex items-center gap-1.5 font-mono text-xs" style={{ color: "var(--pf-text-secondary)" }}>
+                        <Phone size={12} className="flex-shrink-0" style={{ color: "var(--pf-text-muted)" }} />
+                        {v}
+                    </span>
+                );
+            },
+        },
+        {
+            accessorKey: "codiceFiscale",
+            header: "CF",
+            cell: ({ getValue }) => {
+                const v = getValue() as string;
+                return (
+                    <span
+                        className="font-mono text-[11px] px-1.5 py-0.5 rounded"
+                        style={{ backgroundColor: "var(--pf-bg-hover)", color: "var(--pf-text-muted)" }}
+                    >
+                        {v}
+                    </span>
+                );
+            },
+            meta: { nascostaMobile: true },
+        },
+        {
+            accessorKey: "citta",
+            header: "Città",
+            cell: ({ getValue }) => (
+                <span className="text-xs" style={{ color: "var(--pf-text-secondary)" }}>
+                    {(getValue() as string | null) ?? "—"}
+                </span>
+            ),
+            meta: { nascostaMobile: true },
+        },
+        {
+            id: "azioni",
+            header: "",
+            enableSorting: false,
+            cell: ({ row }) => (
+                <div className="flex items-center gap-1 justify-end">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            apriModifica(row.original);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-[var(--pf-bg-hover)] transition-colors"
+                        style={{ color: "var(--pf-text-muted)" }}
+                        title="Modifica"
+                    >
+                        <Pencil size={14} />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            avviaElimina(row.original);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                        style={{ color: "var(--pf-text-muted)" }}
+                        title="Elimina"
+                    >
+                        <Trash2 size={14} />
+                    </button>
+                </div>
+            ),
+        },
+    ];
 
     // Aggiorna campo form
     const setCampo = useCallback(<K extends keyof StatoForm>(campo: K, valore: StatoForm[K]) => {
         setForm((prev) => ({ ...prev, [campo]: valore }));
-        // Pulisci errore quando l'utente digita
         setErrori((prev) => ({ ...prev, [campo]: undefined }));
     }, []);
 
@@ -240,11 +249,21 @@ export default function PaginaClienti() {
         setPannelloAperto(true);
     }, []);
 
-    // Elimina (per ora solo console)
-    const gestisciElimina = useCallback((cliente: Cliente) => {
-        // TODO: dialog conferma + hook useEliminaCliente
-        console.log("Elimina cliente:", cliente.id);
+    // Avvia flusso eliminazione
+    const avviaElimina = useCallback((cliente: Cliente) => {
+        setClientePerElimina(cliente);
     }, []);
+
+    // Conferma eliminazione
+    const confermaElimina = useCallback(async () => {
+        if (!clientePerElimina) return;
+        try {
+            await eliminaCliente.mutateAsync(clientePerElimina.id);
+            setClientePerElimina(null);
+        } catch {
+            // errore gestito da TanStack Query
+        }
+    }, [clientePerElimina, eliminaCliente]);
 
     // Valida form
     const valida = (): boolean => {
@@ -266,16 +285,30 @@ export default function PaginaClienti() {
     // Salva
     const gestisciSalva = useCallback(async () => {
         if (!valida()) return;
-        setIsSalvataggio(true);
+        const payload = {
+            nome: form.nome,
+            cognome: form.cognome,
+            codiceFiscale: form.codiceFiscale,
+            telefono: form.telefono,
+            email: form.email || undefined,
+            indirizzo: form.indirizzo || undefined,
+            citta: form.citta || undefined,
+            cap: form.cap || undefined,
+            provincia: form.provincia || undefined,
+            iban: form.iban || undefined,
+            note: form.note || undefined,
+        };
         try {
-            // TODO: sostituire con useCreaCliente / useAggiornaCliente
-            await new Promise((r) => setTimeout(r, 800)); // simula API
-            console.log(clienteInModifica ? "Aggiorna:" : "Crea:", form);
+            if (clienteInModifica) {
+                await aggiornaCliente.mutateAsync({ id: clienteInModifica.id, dati: payload });
+            } else {
+                await creaCliente.mutateAsync(payload);
+            }
             setPannelloAperto(false);
-        } finally {
-            setIsSalvataggio(false);
+        } catch {
+            // errore gestito da TanStack Query
         }
-    }, [form, clienteInModifica]);
+    }, [form, clienteInModifica, creaCliente, aggiornaCliente]);
 
     // Dettaglio mobile espandibile
     const rigaEspandibile = (cliente: Cliente) => (
@@ -317,7 +350,7 @@ export default function PaginaClienti() {
                             Clienti
                         </h1>
                         <p className="text-sm" style={{ color: "var(--pf-text-muted)" }}>
-                            Anagrafica clienti
+                            {clienti.length} client{clienti.length === 1 ? "e" : "i"} · anagrafica
                         </p>
                     </div>
                 </div>
@@ -326,7 +359,7 @@ export default function PaginaClienti() {
             {/* DataTable */}
             <DataTable
                 colonne={colonne}
-                dati={dati}
+                dati={clienti}
                 getRowId={(c) => c.id}
                 placeholderRicerca="Cerca per nome, cognome, email, CF, città..."
                 mostraToggleColonne
@@ -344,11 +377,27 @@ export default function PaginaClienti() {
                 }
                 toolbarExport={
                     <ExportToolbar
-                        dati={dati as unknown as Record<string, unknown>[]}
+                        dati={clienti as unknown as Record<string, unknown>[]}
                         colonne={colonneExport}
                         nomeFile="clienti"
                     />
                 }
+            />
+
+            {/* === DIALOG CONFERMA ELIMINAZIONE === */}
+            <DialogConferma
+                aperto={!!clientePerElimina}
+                onChiudi={() => setClientePerElimina(null)}
+                onConferma={confermaElimina}
+                titolo="Elimina cliente"
+                messaggio={
+                    clientePerElimina
+                        ? `Vuoi eliminare ${clientePerElimina.cognome} ${clientePerElimina.nome}? Questa azione non può essere annullata.`
+                        : ""
+                }
+                labelConferma="Elimina"
+                tipo="pericolo"
+                isCaricamento={isEliminazione}
             />
 
             {/* === PANNELLO CRUD === */}

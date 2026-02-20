@@ -3,7 +3,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
-import { apiGet, apiPost, apiPatch } from "@/lib/api";
+import { apiGet, apiPost, apiPatch, apiDelete } from "@/lib/api";
 import type {
     Cantiere,
     CantiereDettaglio,
@@ -172,6 +172,26 @@ export function useTransizioneStato() {
             queryClient.invalidateQueries({
                 queryKey: CHIAVI_CANTIERI.vincoli(variabili.cantiereId),
             });
+        },
+    });
+}
+
+/** Eliminazione cantiere */
+export function useEliminaCantiere() {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const token = await getToken();
+            const risposta = await apiDelete<void>(
+                `/cantieri/${id}`,
+                { token: token ?? undefined }
+            );
+            return risposta.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CHIAVI_CANTIERI.base });
         },
     });
 }

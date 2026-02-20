@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/pannello-crud";
 import { ExportToolbar } from "@/components/ui/export-toolbar";
 import { BadgeStato } from "@/components/ui/badge-stato";
+import { DialogConferma } from "@/components/ui/dialog-conferma";
 import { utentiDemo, ruoliDemo, areeDemo } from "@/lib/dati-mock";
+import { useUtenti, useCreaUtente, useAggiornaUtente, useEliminaUtente } from "@/hooks/use-utenti";
 import type { UtenteDettaglio } from "@/types";
 
 // === Tipo form ===
@@ -54,8 +56,14 @@ const formVuoto: FormUtente = {
 };
 
 export default function PaginaOrganigramma() {
-    // --- Dati locali (mock) ---
-    const [utenti, setUtenti] = useState<UtenteDettaglio[]>(utentiDemo);
+    // --- Hook dati reali n8n (fallback a mock se API non disponibile) ---
+    const { utenti: utentiApi } = useUtenti();
+    const creaUtente = useCreaUtente();
+    const aggiornaUtente = useAggiornaUtente();
+    const eliminaUtente = useEliminaUtente();
+
+    // Dati: usa API se disponibili, altrimenti mock
+    const utenti = utentiApi.length > 0 ? utentiApi : utentiDemo;
 
     // --- Pannello CRUD ---
     const [pannelloAperto, setPannelloAperto] = useState(false);
@@ -63,7 +71,7 @@ export default function PaginaOrganigramma() {
     const [utenteCorrente, setUtenteCorrente] = useState<UtenteDettaglio | null>(null);
     const [form, setForm] = useState<FormUtente>(formVuoto);
     const [errori, setErrori] = useState<ErroriForm>({});
-    const [isSalvataggio, setIsSalvataggio] = useState(false);
+    const isSalvataggio = creaUtente.isPending || aggiornaUtente.isPending;
 
     // --- Helpers ---
     const getRuolo = (id: string) => ruoliDemo.find((r) => r.id === id);
@@ -96,14 +104,27 @@ export default function PaginaOrganigramma() {
         setPannelloAperto(true);
     }, []);
 
-    // === Disattiva (non elimina) ===
-    const disattivaUtente = useCallback((id: string, e: React.MouseEvent) => {
+    // Dialog conferma disattivazione
+    const [utentePerDisattiva, setUtentePerDisattiva] = useState<UtenteDettaglio | null>(null);
+
+    // === Disattiva (non elimina fisicamente) ===
+    const avviaDisattiva = useCallback((utente: UtenteDettaglio, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!confirm("Vuoi disattivare questo utente?")) return;
-        setUtenti((prev) =>
-            prev.map((u) => (u.id === id ? { ...u, attivo: false } : u))
-        );
+        setUtentePerDisattiva(utente);
     }, []);
+
+    const confermaDisattiva = useCallback(async () => {
+        if (!utentePerDisattiva) return;
+        try {
+            await aggiornaUtente.mutateAsync({
+                id: utentePerDisattiva.id,
+                dati: { attivo: false },
+            });
+            setUtentePerDisattiva(null);
+        } catch {
+            // errore gestito da TanStack Query
+        }
+    }, [utentePerDisattiva, aggiornaUtente]);
 
     // === Validazione form ===
     const valida = (): boolean => {
@@ -120,56 +141,25 @@ export default function PaginaOrganigramma() {
     // === Salva utente ===
     const salva = async () => {
         if (!valida()) return;
-        setIsSalvataggio(true);
-
-        // TODO: chiamata API n8n POST/PATCH /utenti
-        await new Promise((r) => setTimeout(r, 600));
-
-        const ruolo = getRuolo(form.ruoloId)!;
-        const area = form.areaId ? getArea(form.areaId) : null;
-        const ora = new Date().toISOString();
-
-        if (modalitaModifica && utenteCorrente) {
-            setUtenti((prev) =>
-                prev.map((u) =>
-                    u.id === utenteCorrente.id
-                        ? {
-                            ...u,
-                            nome: form.nome.trim(),
-                            cognome: form.cognome.trim(),
-                            emailAziendale: form.emailAziendale.trim() || null,
-                            whatsapp: form.whatsapp.trim() || null,
-                            ruoloId: form.ruoloId,
-                            areaId: form.areaId || null,
-                            attivo: form.attivo,
-                            aggiornatoIl: ora,
-                            ruolo: { codice: ruolo.codice, label: ruolo.label, colore: ruolo.colore },
-                            area: area ? { codice: area.codice, label: area.label } : null,
-                        }
-                        : u
-                )
-            );
-        } else {
-            const nuovo: UtenteDettaglio = {
-                id: `u${Date.now()}`,
-                clerkUserId: `clerk_new_${Date.now()}`,
-                nome: form.nome.trim(),
-                cognome: form.cognome.trim(),
-                emailAziendale: form.emailAziendale.trim() || null,
-                whatsapp: form.whatsapp.trim() || null,
-                ruoloId: form.ruoloId,
-                areaId: form.areaId || null,
-                attivo: form.attivo,
-                creatoIl: ora,
-                aggiornatoIl: ora,
-                ruolo: { codice: ruolo.codice, label: ruolo.label, colore: ruolo.colore },
-                area: area ? { codice: area.codice, label: area.label } : null,
-            };
-            setUtenti((prev) => [nuovo, ...prev]);
+        const payload = {
+            nome: form.nome.trim(),
+            cognome: form.cognome.trim(),
+            emailAziendale: form.emailAziendale.trim() || undefined,
+            whatsapp: form.whatsapp.trim() || undefined,
+            ruoloId: form.ruoloId,
+            areaId: form.areaId || undefined,
+            attivo: form.attivo,
+        };
+        try {
+            if (modalitaModifica && utenteCorrente) {
+                await aggiornaUtente.mutateAsync({ id: utenteCorrente.id, dati: payload });
+            } else {
+                await creaUtente.mutateAsync({ ...payload, clerkUserId: `clerk_pending_${Date.now()}` });
+            }
+            setPannelloAperto(false);
+        } catch {
+            // errore gestito da TanStack Query
         }
-
-        setIsSalvataggio(false);
-        setPannelloAperto(false);
     };
 
     // === Colonne DataTable ===
@@ -274,7 +264,7 @@ export default function PaginaOrganigramma() {
                     </button>
                     {row.original.attivo && (
                         <button
-                            onClick={(e) => disattivaUtente(row.original.id, e)}
+                            onClick={(e) => avviaDisattiva(row.original, e)}
                             title="Disattiva"
                             className="p-1.5 rounded-md hover:bg-red-500/10 transition-colors"
                             style={{ color: "#ef4444" }}
@@ -382,6 +372,22 @@ export default function PaginaOrganigramma() {
                         <p className="text-sm text-[var(--pf-text-secondary)]">Nessun utente trovato</p>
                     </div>
                 }
+            />
+
+            {/* === DIALOG CONFERMA DISATTIVAZIONE === */}
+            <DialogConferma
+                aperto={!!utentePerDisattiva}
+                onChiudi={() => setUtentePerDisattiva(null)}
+                onConferma={confermaDisattiva}
+                titolo="Disattiva utente"
+                messaggio={
+                    utentePerDisattiva
+                        ? `Vuoi disattivare ${utentePerDisattiva.nome} ${utentePerDisattiva.cognome}? L'utente non potrà più accedere al sistema.`
+                        : ""
+                }
+                labelConferma="Disattiva"
+                tipo="avviso"
+                isCaricamento={aggiornaUtente.isPending}
             />
 
             {/* === PANNELLO CRUD === */}
