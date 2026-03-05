@@ -1,9 +1,9 @@
-// Hook CRUD fornitori — lista, dettaglio, creazione, aggiornamento
+// Hook CRUD fornitori — lista, dettaglio, creazione, aggiornamento, eliminazione
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
-import { apiGet, apiPost, apiPatch } from "@/lib/api";
+import { apiGet, apiPost, apiPatch, apiDelete } from "@/lib/api";
 import type { Fornitore, FornitoreCreazione, FiltriFornitori } from "@/types";
 
 /** Chiavi query per fornitori */
@@ -107,6 +107,26 @@ export function useAggiornaFornitore() {
             queryClient.invalidateQueries({
                 queryKey: CHIAVI_FORNITORI.dettaglio(variabili.id),
             });
+        },
+    });
+}
+
+/** Eliminazione fornitore */
+export function useEliminaFornitore() {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const token = await getToken();
+            const risposta = await apiDelete<void>(
+                `/fornitori/${id}`,
+                { token: token ?? undefined }
+            );
+            return risposta.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CHIAVI_FORNITORI.base });
         },
     });
 }

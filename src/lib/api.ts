@@ -3,7 +3,12 @@
 
 import type { ApiRisposta, ApiErrore, OpzioniRichiesta } from "@/types";
 
-const URL_BASE = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL ?? "";
+// In ambiente browser: usa il proxy Next.js (/api/n8n) per evitare CORS
+// In ambiente server: usa l'URL diretto di n8n
+const URL_BASE =
+    typeof window !== "undefined"
+        ? "/api/n8n"
+        : (process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL ?? "");
 
 /** Errore API personalizzato */
 export class ErroreApi extends Error {
@@ -23,7 +28,24 @@ export class ErroreApi extends Error {
 
 /** Costruisci URL completo con query string */
 function costruisciUrl(percorso: string, parametri?: Record<string, string | number | undefined>): string {
-    const url = new URL(`${URL_BASE}${percorso}`);
+    const percorsoCompleto = `${URL_BASE}${percorso}`;
+
+    // Per URL relativi (proxy), costruisci manualmente la query string
+    if (percorsoCompleto.startsWith("/")) {
+        const params = new URLSearchParams();
+        if (parametri) {
+            Object.entries(parametri).forEach(([chiave, valore]) => {
+                if (valore !== undefined && valore !== null && valore !== "") {
+                    params.set(chiave, String(valore));
+                }
+            });
+        }
+        const qs = params.toString();
+        return qs ? `${percorsoCompleto}?${qs}` : percorsoCompleto;
+    }
+
+    // Per URL assoluti (server-side), usa new URL()
+    const url = new URL(percorsoCompleto);
     if (parametri) {
         Object.entries(parametri).forEach(([chiave, valore]) => {
             if (valore !== undefined && valore !== null && valore !== "") {

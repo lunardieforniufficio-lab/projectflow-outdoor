@@ -3,7 +3,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
-import { apiGet, apiPost, apiPatch } from "@/lib/api";
+import { apiGet, apiPost, apiPatch, apiDelete } from "@/lib/api";
 import type { UtenteGestionale, UtenteDettaglio, UtenteCreazione } from "@/types";
 
 /** Chiavi query per utenti */
@@ -106,6 +106,26 @@ export function useAggiornaUtente() {
             queryClient.invalidateQueries({
                 queryKey: CHIAVI_UTENTI.dettaglio(variabili.id),
             });
+        },
+    });
+}
+
+/** Eliminazione utente */
+export function useEliminaUtente() {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const token = await getToken();
+            const risposta = await apiDelete<void>(
+                `/utenti/${id}`,
+                { token: token ?? undefined }
+            );
+            return risposta.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CHIAVI_UTENTI.base });
         },
     });
 }

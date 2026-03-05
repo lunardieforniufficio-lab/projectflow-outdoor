@@ -3,7 +3,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
-import { apiGet, apiPost, apiPatch } from "@/lib/api";
+import { apiGet, apiPost, apiPatch, apiDelete } from "@/lib/api";
 import type { Squadra, SquadraCreazione } from "@/types";
 
 /** Chiavi query per squadre */
@@ -100,6 +100,83 @@ export function useAggiornaSquadra() {
             queryClient.invalidateQueries({
                 queryKey: CHIAVI_SQUADRE.dettaglio(variabili.id),
             });
+        },
+    });
+}
+
+/** Eliminazione squadra */
+export function useEliminaSquadra() {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const token = await getToken();
+            const risposta = await apiDelete<void>(
+                `/squadre/${id}`,
+                { token: token ?? undefined }
+            );
+            return risposta.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: CHIAVI_SQUADRE.base });
+        },
+    });
+}
+
+/** Aggiungi membro a squadra */
+export function useAggiuntaMembro() {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({
+            squadraId,
+            utenteId,
+            ruolo,
+        }: {
+            squadraId: string;
+            utenteId: string;
+            ruolo?: string;
+        }) => {
+            const token = await getToken();
+            const risposta = await apiPost<void>(
+                `/squadre/${squadraId}/membri`,
+                { utenteId, ruolo },
+                { token: token ?? undefined }
+            );
+            return risposta.data;
+        },
+        onSuccess: (_data, variabili) => {
+            queryClient.invalidateQueries({ queryKey: CHIAVI_SQUADRE.dettaglio(variabili.squadraId) });
+            queryClient.invalidateQueries({ queryKey: CHIAVI_SQUADRE.base });
+        },
+    });
+}
+
+/** Rimuovi membro da squadra */
+export function useRimozioneMembro() {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({
+            squadraId,
+            membroId,
+        }: {
+            squadraId: string;
+            membroId: string;
+        }) => {
+            const token = await getToken();
+            const risposta = await apiDelete<void>(
+                `/squadre/${squadraId}/membri/${membroId}`,
+                { token: token ?? undefined }
+            );
+            return risposta.data;
+        },
+        onSuccess: (_data, variabili) => {
+            queryClient.invalidateQueries({ queryKey: CHIAVI_SQUADRE.dettaglio(variabili.squadraId) });
+            queryClient.invalidateQueries({ queryKey: CHIAVI_SQUADRE.base });
         },
     });
 }

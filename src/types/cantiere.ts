@@ -195,9 +195,13 @@ export interface FiltriCantiere {
 export interface CantiereCreazione {
     clienteId: string;
     tipoProdottoId: string;
+    statoId?: string;
     indirizzoCantiere: string;
     cittaCantiere?: string;
     importoTotale?: number;
+    importoAcconto?: number;
+    accontoPagato?: boolean;
+    squadraId?: string;
     venditoreId?: string;
     dataInizio?: string;
     dataFinePrevista?: string;
@@ -206,9 +210,12 @@ export interface CantiereCreazione {
 
 /** Payload aggiornamento cantiere (PATCH /cantieri/:id) */
 export interface CantiereAggiornamento {
+    clienteId?: string;
     tipoProdottoId?: string;
+    statoId?: string;
     importoTotale?: number;
     importoAcconto?: number;
+    accontoPagato?: boolean;
     indirizzoCantiere?: string;
     cittaCantiere?: string;
     squadraId?: string;

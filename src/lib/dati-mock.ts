@@ -16,15 +16,15 @@ import type {
 
 // === STATI CANTIERE (simula DB) ===
 export const statiCantiereDemo = [
-    { id: "s1", codice: "LEAD", label: "Lead", colore: "#3b82f6", icona: "user-plus", ordine: 1 },
-    { id: "s2", codice: "VENDITA", label: "Vendita", colore: "#f59e0b", icona: "handshake", ordine: 2 },
-    { id: "s3", codice: "ACCONTO", label: "Acconto", colore: "#8b5cf6", icona: "credit-card", ordine: 3 },
-    { id: "s4", codice: "RILIEVO", label: "Rilievo", colore: "#06b6d4", icona: "ruler", ordine: 4 },
-    { id: "s5", codice: "PROGETTO", label: "Progetto", colore: "#ec4899", icona: "pencil-ruler", ordine: 5 },
-    { id: "s6", codice: "ORDINE", label: "Ordine", colore: "#f97316", icona: "package", ordine: 6 },
-    { id: "s7", codice: "POSA", label: "Posa", colore: "#1B8C3A", icona: "hammer", ordine: 7 },
-    { id: "s8", codice: "COLLAUDO", label: "Collaudo", colore: "#14b8a6", icona: "check-circle", ordine: 8 },
-    { id: "s9", codice: "SALDO", label: "Saldo", colore: "#22c55e", icona: "banknote", ordine: 9 },
+    { id: "s1", codice: "LEAD", label: "Lead", colore: "#3b82f6", icona: "user-plus", ordine: 1, descrizione: null, isIniziale: true, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s2", codice: "VENDITA", label: "Vendita", colore: "#f59e0b", icona: "handshake", ordine: 2, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s3", codice: "ACCONTO", label: "Acconto", colore: "#8b5cf6", icona: "credit-card", ordine: 3, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s4", codice: "RILIEVO", label: "Rilievo", colore: "#06b6d4", icona: "ruler", ordine: 4, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s5", codice: "PROGETTO", label: "Progetto", colore: "#ec4899", icona: "pencil-ruler", ordine: 5, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s6", codice: "ORDINE", label: "Ordine", colore: "#f97316", icona: "package", ordine: 6, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s7", codice: "POSA", label: "Posa", colore: "#1B8C3A", icona: "hammer", ordine: 7, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s8", codice: "COLLAUDO", label: "Collaudo", colore: "#14b8a6", icona: "check-circle", ordine: 8, descrizione: null, isIniziale: false, isFinale: false, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "s9", codice: "SALDO", label: "Saldo", colore: "#22c55e", icona: "banknote", ordine: 9, descrizione: null, isIniziale: false, isFinale: true, attivo: true, creatoIl: "2025-01-01T00:00:00Z" },
 ];
 
 // === CLIENTI DEMO ===
@@ -45,9 +45,9 @@ export const squadreDemo: Squadra[] = [
 
 // === TIPI PRODOTTO DEMO ===
 export const tipiProdottoDemo = [
-    { id: "tp1", codice: "evolution_elite", label: "Evolution Elite", categoria: "pergola" },
-    { id: "tp2", codice: "bioclimatica_plus", label: "Bioclimatica Plus", categoria: "bioclimatica" },
-    { id: "tp3", codice: "pergotenda_classic", label: "Pergotenda Classic", categoria: "pergotenda" },
+    { id: "tp1", codice: "evolution_elite", label: "Evolution Elite", categoria: "pergola", descrizione: null, attivo: true, ordine: 1, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "tp2", codice: "bioclimatica_plus", label: "Bioclimatica Plus", categoria: "bioclimatica", descrizione: null, attivo: true, ordine: 2, creatoIl: "2025-01-01T00:00:00Z" },
+    { id: "tp3", codice: "pergotenda_classic", label: "Pergotenda Classic", categoria: "pergotenda", descrizione: null, attivo: true, ordine: 3, creatoIl: "2025-01-01T00:00:00Z" },
 ];
 
 // === CANTIERI DEMO ===
